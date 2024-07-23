@@ -1,10 +1,11 @@
 'use client'
 import { CaseUpper, Circle, Eraser, MousePointer, MoveUpRight, Pen, Square, Trash2 } from 'lucide-react'
 import React from 'react'
-import {activeToolAtom} from '../utils/atom'
+import {activeToolAtom, elementsAtom} from '../utils/atom'
 import { useRecoilState } from 'recoil';
 function Bar() {
   const [tool, setTool] = useRecoilState(activeToolAtom);
+  const [elements, setElements] = useRecoilState(elementsAtom);
   
   return (
     <div className='flex justify-center items-center space-x-2 fixed top-5 left-[40%] text-white bg-gray-900 p-1 rounded-lg z-50'>
@@ -33,7 +34,9 @@ function Bar() {
         <Circle 
         size={40} 
         strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "CIRCLE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}/>
+        className={` hover:bg-gray-950 ${tool === "CIRCLE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+        onClick={() => setTool('CIRCLE')}
+        />
         <CaseUpper 
         size={40} 
         strokeWidth={2} 
@@ -46,7 +49,7 @@ function Bar() {
         size={40} 
         strokeWidth={2} 
         className={` hover:bg-gray-950 ${tool === "CLEAR" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setTool('CLEAR')}
+        onClick={() => setElements([])}
         />
     </div>
   )
