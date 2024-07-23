@@ -1,13 +1,13 @@
 'use client'
 import { CaseUpper, Circle, Eraser, MousePointer, MoveUpRight, Pen, Square, Trash2 } from 'lucide-react'
 import React from 'react'
-import {activeTool} from '../utils/atom'
+import {activeToolAtom} from '../utils/atom'
 import { useRecoilState } from 'recoil';
 function Bar() {
-  const [tool, setTool] = useRecoilState(activeTool);
+  const [tool, setTool] = useRecoilState(activeToolAtom);
   
   return (
-    <div className='flex justify-center items-center space-x-2 fixed top-5 left-[40%] text-white bg-gray-900 p-1 rounded-lg'>
+    <div className='flex justify-center items-center space-x-2 fixed top-5 left-[40%] text-white bg-gray-900 p-1 rounded-lg z-50'>
         <Pen 
         size={40}
         strokeWidth={2} 

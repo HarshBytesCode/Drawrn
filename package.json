@@ -13,7 +13,8 @@
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "roughjs": "^4.6.6"
   },
   "devDependencies": {
     "@types/node": "^20",

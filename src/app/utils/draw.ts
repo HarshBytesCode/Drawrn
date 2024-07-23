@@ -1,62 +1,75 @@
-import { RefObject } from "react";
-import usePosition from "../hooks/usePosition";
-import useClick from "../hooks/useClick";
+'use client'
+import { MouseEvent, RefObject, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { activeTool } from "./atom";
+import { activeToolAtom, elementsAtom } from "./atom";
+import rough from 'roughjs';
+import { createElement } from "./createElement";
+const generator = rough.generator()
+let activeElement:{id: number, x: number, y: number} | null;
+let id = 1;
 
 
-export default function Draw(canvasRef: RefObject<HTMLCanvasElement>) {
-    const [tool, setTool] = useRecoilState(activeTool);
-    const ctx = canvasRef.current?.getContext("2d");
-    const {position, velocity} = usePosition()
-    const mouse = useClick()
-    let x,y;
-    const scrollY = window.scrollY
-    const scrollX = window.scrollX
+export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
+  const [elements, setElements] = useRecoilState(elementsAtom)
+  
+  const [tool, setTool] = useRecoilState(activeToolAtom);
+  const ctx = canvasRef.current?.getContext("2d");
+  let rc:any;
+  if(canvasRef.current){
+    rc = rough.canvas(canvasRef.current)
+  }
+  // @ts-ignore
+  ctx?.clearRect(0,0, canvasRef.current?.width, canvasRef.current?.height)
+  elements.forEach((element: any) => {
+    if(element) {
+      rc.draw(element.roughElement)
+    }
+  })
+
+  
+  
+}
+// Fix type
+export const MouseDown = ({e, tool, setElements}: {e:any, tool:string, setElements: any}) => {
+  const x = e.clientX + window.scrollX;
+  const y = e.clientY + window.scrollY;
+  
+  if(tool === "SQUARE") {
+    const roughElement = generator.rectangle(x,y, x-x, y-y, {stroke: 'white'});
+    const element = {
+      id: ++id ,
+      startX: x,
+      startY: y,
+      roughElement
+    }
     
-    if(mouse && position){
-      [x, y] = [position.x, position.y]
+    setElements((prev: []) => [...prev, element]);
+    activeElement = {id,x,y};
+    
+  }
 
-    }
+  if(tool === 'CLEAR') {
+    setElements([])
+    
+  }
+  
+}
+export const MouseMove = ({e, tool, elements , setElements}: {e:any, tool:string, elements:any, setElements: any}) => {
+  const x = e.clientX + window.scrollX;
+  const y = e.clientY + window.scrollY;
+  if(activeElement) {
+    const copyElement = [...elements]
+    
+    copyElement[activeElement.id] = createElement({id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y});
+    setElements(copyElement);
+    
+    
+  }
 
-    if(tool === 'PEN'){
-      if(!mouse){
-        ctx?.beginPath()  
-      }
-      if(position && ctx && mouse) {
-        ctx.lineCap= 'round'
-        ctx.lineWidth = velocity*2;
-        ctx.strokeStyle = '#FFFFFF'
-        ctx.lineTo(position.x + scrollX, position.y + scrollY);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(position.x + scrollX, position.y +scrollY);
-        
-      }
-    }
-    if(tool === 'MOVE') {
-      
-    }
-    let z = 0;
-    if(tool === 'SQUARE') {
-      // let x: number,y:number;
-      // let z = 0;
-      // if(position && mouse && z === 0){
-      //   x = position.x
-      //   y = position.y
-      //   z++
-      // }
-      if(ctx && mouse && position ) {
-        ctx.strokeStyle = '#FFFFFF'
-        ctx.fillStyle = 'red'
-        ctx?.fillRect(x,y, position.x -x,position.y-y)
-        ctx?.stroke
+  
+}
 
-      }
-    }
-
-    if(tool === 'CLEAR') {
-      ctx?.clearRect(0,0, canvasRef.current?.width, canvasRef.current?.height)
-      setTool('PEN')
-    }
+export const MouseUp = ({e, tool}: {e:any, tool:string}) => {
+  activeElement = null;
+  
 }
