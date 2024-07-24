@@ -10,3 +10,8 @@ export const elementsAtom = atom({
     key: 'elements',
     default: []
 })
+
+export const isWritingAtom = atom({
+    key: 'isWriting',
+    default: false
+})

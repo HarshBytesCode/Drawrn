@@ -1,17 +1,16 @@
 'use client'
 import { RefObject } from "react";
 import { useRecoilState } from "recoil";
-import { activeToolAtom, elementsAtom } from "./atom";
+import { activeToolAtom, elementsAtom, isWritingAtom } from "./atom";
 import rough from 'roughjs';
 import { createElement } from "./createElement";
+import usePosition from "../hooks/usePosition";
 let activeElement:{id: number, x: number, y: number} | null;
 let id = 1;
 let rc:any;
 
 export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const [elements, setElements] = useRecoilState(elementsAtom);
-  const [tool, setTool] = useRecoilState(activeToolAtom);
-
 
   const ctx = canvasRef.current?.getContext("2d");
 
@@ -44,16 +43,24 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
     if(element.type === 'CIRCLE') {
       rc.draw(element.roughElement)
     }
+
+    if(element.type === 'TEXT') {
+      // console.log(element); 
+      ctx.fillStyle = 'white';
+      ctx.font = "23px Courier";
+      ctx?.fillText(element.text, element.startX, element.startY)
+      
+    }
   })
   
   
 }
 
 // Fix type
-export const MouseDown = ({e, tool, setElements}: {e:any, tool:string, setElements: any}) => {
+export const MouseDown = ({e, tool, setElements, setIsWriting}: {e:any, tool:string, setElements: any, setIsWriting:any}) => {
   const x = e.clientX + window.scrollX;
   const y = e.clientY + window.scrollY;
-  
+
   if(tool ==='PEN') {
     const element = createElement({id: ++id, startX:x, startY:y, type: tool});
     setElements((prev: []) => [...prev, element]);
@@ -61,7 +68,6 @@ export const MouseDown = ({e, tool, setElements}: {e:any, tool:string, setElemen
   }
 
   if(tool === 'ARROW') {
-    console.log('down');
     
     const element = createElement({id: ++id, startX:x, startY:y, currentX: x, currentY: y, type: tool })
     setElements((prev: []) => [...prev, element]);

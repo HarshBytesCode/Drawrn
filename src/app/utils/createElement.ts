@@ -30,7 +30,6 @@ export function createElement({id, startX, startY, currentX, currentY, type, emp
     if(type == 'ARROW') {
 
       const roughElement = generator.line(startX, startY, currentX, currentY, {stroke: 'white', strokeWidth: 2, roughness: 2, bowing: 1.25})
-
       return {
         id,
         roughElement,
