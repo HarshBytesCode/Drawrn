@@ -27,8 +27,19 @@ export function createElement({id, startX, startY, currentX, currentY, type, emp
       
     }
 
+    if(type == 'ARROW') {
+
+      const roughElement = generator.line(startX, startY, currentX, currentY, {stroke: 'white', strokeWidth: 2, roughness: 2, bowing: 1.25})
+
+      return {
+        id,
+        roughElement,
+        type
+      }
+    }
+
     if(type == 'SQUARE') {
-      const roughElement = generator.rectangle(startX, startY, currentX-startX,currentY-startY, {stroke: 'white'} )
+      const roughElement = generator.rectangle(startX, startY, currentX-startX,currentY-startY, {stroke: 'white', roughness: 1, bowing: 2} )
       return {
         id,
         startX,
@@ -38,7 +49,7 @@ export function createElement({id, startX, startY, currentX, currentY, type, emp
       }
     }
     if(type == 'CIRCLE') {
-      const roughElement = generator.ellipse(startX, startY, currentX-startX,currentY-startY, {stroke: 'white',strokeWidth: 2 , roughness: 0} )
+      const roughElement = generator.ellipse(startX, startY, currentX-startX,currentY-startY, {stroke: 'white',strokeWidth: 2 , bowing: 8} )
       return {
         id,
         startX,

@@ -1,5 +1,5 @@
 'use client'
-import { CaseUpper, Circle, Eraser, MousePointer, MoveUpRight, Pen, Square, Trash2 } from 'lucide-react'
+import { CaseUpper, Circle, Eraser, Minus, MousePointer, MoveUpRight, Pen, Square, Trash2 } from 'lucide-react'
 import React from 'react'
 import {activeToolAtom, elementsAtom} from '../utils/atom'
 import { useRecoilState } from 'recoil';
@@ -21,10 +21,12 @@ function Bar() {
         className={` hover:bg-gray-950 ${tool === "MOVE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
         onClick={() => setTool('MOVE')}
         />
-        <MoveUpRight 
+        <Minus 
         size={40} 
         strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "ARROW" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}/>
+        className={` hover:bg-gray-950 ${tool === "ARROW" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+        onClick={() => setTool('ARROW')}
+        />
         <Square 
         size={40} 
         strokeWidth={2} 

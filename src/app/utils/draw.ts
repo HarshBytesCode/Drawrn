@@ -27,15 +27,21 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
     if(!element) {
       return
     }
-    if(element.type == 'PEN') {
+    if(element.type === 'PEN') {
       element.roughElementArray.forEach((subelement:any) => {
         rc.draw(subelement)
       })
     }
-    if(element.type == 'SQUARE') {
+
+    if(element.type === 'ARROW') {
       rc.draw(element.roughElement)
     }
-    if(element.type == 'CIRCLE') {
+
+    if(element.type === 'SQUARE') {
+      rc.draw(element.roughElement)
+    }
+
+    if(element.type === 'CIRCLE') {
       rc.draw(element.roughElement)
     }
   })
@@ -50,6 +56,14 @@ export const MouseDown = ({e, tool, setElements}: {e:any, tool:string, setElemen
   
   if(tool ==='PEN') {
     const element = createElement({id: ++id, startX:x, startY:y, type: tool});
+    setElements((prev: []) => [...prev, element]);
+    activeElement = {id,x,y};
+  }
+
+  if(tool === 'ARROW') {
+    console.log('down');
+    
+    const element = createElement({id: ++id, startX:x, startY:y, currentX: x, currentY: y, type: tool })
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
   }
@@ -76,7 +90,12 @@ export const MouseMove = ({e, tool, elements , setElements}: {e:any, tool:string
     const copyElement = [...elements]
 
     if(tool == 'PEN') {
-      copyElement[activeElement.id] = createElement({id: ++id, startX:x, startY:y, type: tool});
+      copyElement[activeElement.id] = createElement({id, startX:x, startY:y, type: tool});
+      setElements(copyElement)
+    }
+
+    if(tool == 'ARROW') {
+      copyElement[activeElement.id] = createElement({id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool});
       setElements(copyElement)
     }
     
