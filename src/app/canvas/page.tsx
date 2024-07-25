@@ -11,6 +11,7 @@ function Canvas() {
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [elements, setElements] = useRecoilState(elementsAtom);
+  
   const [tool, setTool] = useRecoilState(activeToolAtom);
   const [isWriting, setIsWriting] = useRecoilState(isWritingAtom);
 
@@ -20,7 +21,7 @@ function Canvas() {
     <div>
       <canvas
       ref={canvasRef} 
-      onMouseDown={(e) => MouseDown({e, tool, setElements, setIsWriting})}
+      onMouseDown={(e) => MouseDown({e, tool,elements , setElements, setIsWriting})}
       onMouseUp={(e) => MouseUp({e, tool})}
       onMouseMove={(e) => MouseMove({e, tool, elements, setElements})}
       width={1920} 
