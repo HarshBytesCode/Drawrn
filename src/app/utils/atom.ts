@@ -15,3 +15,8 @@ export const isWritingAtom = atom({
     key: 'isWriting',
     default: false
 })
+
+export const moveableActiveElementAtom = atom({
+    key: 'moveableActiveElementAtom',
+    default: null
+})

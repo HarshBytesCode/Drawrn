@@ -6,6 +6,7 @@ import rough from 'roughjs';
 import { createElement } from "./createElement";
 import usePosition from "../hooks/usePosition";
 import { randomUUID, UUID } from "crypto";
+import setActiveElement from "./setActiveElement";
 let activeElement:{id: number, x: number, y: number} | null;
 let rc:any;
 
@@ -58,7 +59,7 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
 }
 
 // Fix type
-export const MouseDown = ({e, tool, elements , setElements, setIsWriting}: {e:any, tool:string,elements:any , setElements: any, setIsWriting:any}) => {
+export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveableActiveElement, setMoveableActiveElement}: {e:any, tool:string,elements:any , setElements: any, setIsWriting:any,moveableActiveElement: any , setMoveableActiveElement: any}) => {
   const x = e.clientX + window.scrollX;
   const y = e.clientY + window.scrollY;
   let id: number;
@@ -73,6 +74,11 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting}: {e:an
     activeElement = {id,x,y};
   }
 
+  if(tool === 'SELECTION') {
+    
+    setActiveElement({elements, setElements,moveableActiveElement , setMoveableActiveElement, x, y })
+  }
+
   if(tool === 'ARROW') {
     
     const element = createElement({id: id, startX:x, startY:y, currentX: x, currentY: y, type: tool })
@@ -81,7 +87,7 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting}: {e:an
   }
   
   if(tool === 'SQUARE') {
-    const element = createElement({id: id, startX:x, startY:y, currentX: x, currentY: y, type: tool});
+    const element = createElement({id: id, startX:x, startY:y, currentX: x - x, currentY: y - y, type: tool});
     
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
@@ -112,7 +118,7 @@ export const MouseMove = ({e, tool, elements , setElements}: {e:any, tool:string
     }
     
     if(tool === 'SQUARE' && activeElement && copyElement) {
-      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool});
+      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x - activeElement.x, currentY: y - activeElement.y, type: tool});
       setElements(copyElement);
     }
 

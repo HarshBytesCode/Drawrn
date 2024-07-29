@@ -1,6 +1,7 @@
 import rough from 'roughjs';
 let temp: {}[] = [];
 let prevX:number | null, prevY: number | null;
+
 export function createElement({id, startX, startY, currentX, currentY, type, empty }: any){
     const generator = rough.generator()
     
@@ -32,17 +33,24 @@ export function createElement({id, startX, startY, currentX, currentY, type, emp
       const roughElement = generator.line(startX, startY, currentX, currentY, {stroke: 'white', strokeWidth: 2, roughness: 2, bowing: 1.25})
       return {
         id,
+        startX,
+        startY,
+        endX: currentX,
+        endY: currentY,
         roughElement,
         type
       }
     }
 
     if(type == 'SQUARE') {
-      const roughElement = generator.rectangle(startX, startY, currentX-startX,currentY-startY, {stroke: 'white', roughness: 1, bowing: 2} )
+      
+      const roughElement = generator.rectangle(startX, startY, currentX,currentY, {stroke: 'white', roughness: 1, bowing: 2} )
       return {
         id,
         startX,
         startY,
+        width: currentX,
+        height: currentY,
         roughElement,
         type
       }
@@ -53,6 +61,8 @@ export function createElement({id, startX, startY, currentX, currentY, type, emp
         id,
         startX,
         startY,
+        radiusX: currentX - startX,
+        radiusY: currentY - startY,
         roughElement,
         type
       }

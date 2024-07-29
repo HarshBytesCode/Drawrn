@@ -21,8 +21,8 @@ function Bar() {
         <MousePointer 
         size={40}
         strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "MOVE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setTool('MOVE')}
+        className={` hover:bg-gray-950 ${tool === "SELECTION" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+        onClick={() => setTool('SELECTION')}
         />
         <Minus 
         size={40} 
