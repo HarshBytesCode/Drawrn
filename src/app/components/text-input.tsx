@@ -28,7 +28,7 @@ function TextInput({canvasRef}: any) {
 
         }
         if(x && y) {
-            const element = {id, startX: x + window.scrollX, startY: y + window.scrollY + 5, text: e.target.value, type: 'TEXT'}
+            const element = {id, startX: x + window.scrollX, startY: y + window.scrollY + 5, text: e.target.value, width: e.target.value.length*12, height: 18, type: 'TEXT'}
             // @ts-ignore
             setElements([...elements, element ])
             e.target.value = ''

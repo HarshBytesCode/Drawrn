@@ -1,16 +1,19 @@
 'use client'
 import { CaseUpper, Circle, Eraser, Minus, MousePointer, MoveUpRight, Pen, Square, Trash2 } from 'lucide-react'
 import React from 'react'
-import {activeToolAtom, elementsAtom, isWritingAtom} from '../utils/atom'
+import {activeToolAtom, elementsAtom, isWritingAtom, moveableActiveElementAtom} from '../utils/atom'
 import { useRecoilState } from 'recoil';
 function Bar() {
   const [tool, setTool] = useRecoilState(activeToolAtom);
   const [isWriting, setIsWriting] = useRecoilState(isWritingAtom);
   const [elements, setElements] = useRecoilState(elementsAtom);
+  const [moveableActiveElement, setMoveableActiveElement] = useRecoilState(moveableActiveElementAtom);
   
   return (
     <div className='flex justify-center items-center space-x-2 fixed top-5 left-[40%] text-white bg-gray-900 p-1 rounded-lg z-50'
-    onClick={() => setIsWriting(false)}
+    onClick={() => {
+      setMoveableActiveElement(null)
+      setIsWriting(false)}}
     >
         <Pen 
         size={40}

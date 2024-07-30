@@ -18,13 +18,12 @@ export default function  setActiveElement({elements , setElements,moveableActive
 
         if(element.type === 'ARROW') {
             if(element.startX <= x <= element.endX && element.startY <= y <= element.endY ) {
-                console.log('found');
+                setMoveableActiveElement(element);
                 foundElement = true;
             }
         }
 
         if(element.type === 'CIRCLE') {
-            console.log(element.roughElement);
             
             const rx = Math.abs(element.radiusX);
             const ry = Math.abs(element.radiusY);
@@ -35,6 +34,17 @@ export default function  setActiveElement({elements , setElements,moveableActive
 
             if(circleArea <= 0.28) {
 
+                element = {
+                    id: element.id,
+                    startX: element.startX,
+                    startY: element.startY,
+                    width: element.radiusX,
+                    height: element.radiusY,
+                    roughElement: element.roughElement,
+                    type: element.type,
+                }
+                console.log(element);
+                
                 setMoveableActiveElement(element);
                 foundElement = true;
                 

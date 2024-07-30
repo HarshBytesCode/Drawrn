@@ -36,63 +36,220 @@ function BoundingBox() {
         let newWidth = width;
         let newHeight = height;
 
-        switch (resizingDirection) {
-          case 'se':
-            newWidth = e.clientX - startX; 
-            newHeight = e.clientY - startY;
+        if(moveableActiveElement.type === 'SQUARE') {
 
-            if(newWidth < 0) {
-              setResizingDirection("sw")
-            }
-            if(newHeight < 0) setResizingDirection("ne");
-            break;
-          case 'ne':
-            newWidth = e.clientX - startX;
-            newHeight = height - (e.clientY - startY);
-            setStartY(e.clientY);
-            if(newWidth < 0) {
-              setResizingDirection("nw")
-            }
-            if(newHeight < 0) setResizingDirection("se");
-            break;
-          case 'sw':
-            newWidth = width - (e.clientX - startX)
-            newHeight = e.clientY - startY
-            setStartX(e.clientX)
-            if(newWidth < 0) {
-              setResizingDirection("se")
-            }
-            if(newHeight < 0) setResizingDirection("nw");
-            break;
-          case 'nw':
-            newWidth = width - (e.clientX - startX);
-            newHeight = height - (e.clientY - startY);
-            setStartX(e.clientX);
-            setStartY(e.clientY);
-            if(newWidth < 0) {
-              setResizingDirection("ne")
-            }
-            if(newHeight < 0) setResizingDirection("sw");
-            break;
-          default:
-            break;
+          switch (resizingDirection) {
+            case 'se':
+              newWidth = e.clientX - startX; 
+              newHeight = e.clientY - startY;
+  
+              if(newWidth < 0) {
+                setResizingDirection("sw")
+              }
+              if(newHeight < 0) setResizingDirection("ne");
+              break;
+            case 'ne':
+              newWidth = e.clientX - startX;
+              newHeight = height - (e.clientY - startY);
+              setStartY(e.clientY);
+              if(newWidth < 0) {
+                setResizingDirection("nw")
+              }
+              if(newHeight < 0) setResizingDirection("se");
+              break;
+            case 'sw':
+              newWidth = width - (e.clientX - startX)
+              newHeight = e.clientY - startY
+              setStartX(e.clientX)
+              if(newWidth < 0) {
+                setResizingDirection("se")
+              }
+              if(newHeight < 0) setResizingDirection("nw");
+              break;
+            case 'nw':
+              newWidth = width - (e.clientX - startX);
+              newHeight = height - (e.clientY - startY);
+              setStartX(e.clientX);
+              setStartY(e.clientY);
+              if(newWidth < 0) {
+                setResizingDirection("ne")
+              }
+              if(newHeight < 0) setResizingDirection("sw");
+              break;
+            default:
+              break;
+          }
+            
+          setWidth(newWidth);
+          setHeight(newHeight);
+  
+          const copyElement = [...elements];
+  
+          copyElement[moveableActiveElement.id] = createElement({
+            id: moveableActiveElement.id, 
+            startX:startX, 
+            startY:startY, 
+            currentX: width, 
+            currentY: height, 
+            type: moveableActiveElement.type
+          });
+
+          setElements(copyElement);
         }
+
+        if(moveableActiveElement.type === 'CIRCLE') {
+
+          switch (resizingDirection) {
+            case 'se':
+              newWidth = e.clientX - startX; 
+              newHeight = e.clientY - startY;
+  
+              if(newWidth < 0) {
+                setResizingDirection("sw")
+              }
+              if(newHeight < 0) setResizingDirection("ne");
+              break;
+            case 'ne':
+              newWidth = e.clientX - startX;
+              newHeight = height - (e.clientY - startY);
+              setStartY(e.clientY);
+              if(newWidth < 0) {
+                setResizingDirection("nw")
+              }
+              if(newHeight < 0) setResizingDirection("se");
+              break;
+            case 'sw':
+              newWidth = width - (e.clientX - startX)
+              newHeight = e.clientY - startY
+              setStartX(e.clientX)
+              if(newWidth < 0) {
+                setResizingDirection("se")
+              }
+              if(newHeight < 0) setResizingDirection("nw");
+              break;
+            case 'nw':
+              newWidth = width - (e.clientX - startX);
+              newHeight = height - (e.clientY - startY);
+              setStartX(e.clientX);
+              setStartY(e.clientY);
+              if(newWidth < 0) {
+                setResizingDirection("ne")
+              }
+              if(newHeight < 0) setResizingDirection("sw");
+              break;
+            default:
+              break;
+          }
+            
+          setWidth(newWidth);
+          setHeight(newHeight);
+  
+          const copyElement = [...elements];
           
-        setWidth(newWidth);
-        setHeight(newHeight);
+          copyElement[moveableActiveElement.id] = createElement({
+            id: moveableActiveElement.id, 
+            startX: startX, 
+            startY: startY, 
+            currentX: width + startX, 
+            currentY: height + startY, 
+            type: moveableActiveElement.type
+          });
 
-        const copyElement = [...elements];
-        
-        copyElement[moveableActiveElement.id] = createElement({
-          id: moveableActiveElement.id, 
-          startX:startX, 
-          startY:startY, 
-          currentX: width, 
-          currentY: height, 
-          type: moveableActiveElement.type
-        });
+          setElements(copyElement);
+        }
 
-        setElements(copyElement);
+        if(moveableActiveElement.type === 'ARROW') {
+
+          switch (resizingDirection) {
+            case 'se':
+              newWidth = e.clientX - startX; 
+              newHeight = e.clientY - startY;
+  
+              if(newWidth < 0) {
+                setResizingDirection("sw")
+              }
+              if(newHeight < 0) setResizingDirection("ne");
+              break;
+            case 'ne':
+              newWidth = e.clientX - startX;
+              newHeight = height - (e.clientY - startY);
+              setStartY(e.clientY);
+              if(newWidth < 0) {
+                setResizingDirection("nw")
+              }
+              if(newHeight < 0) setResizingDirection("se");
+              break;
+            case 'sw':
+              newWidth = width - (e.clientX - startX)
+              newHeight = e.clientY - startY
+              setStartX(e.clientX)
+              if(newWidth < 0) {
+                setResizingDirection("se")
+              }
+              if(newHeight < 0) setResizingDirection("nw");
+              break;
+            case 'nw':
+              newWidth = width - (e.clientX - startX);
+              newHeight = height - (e.clientY - startY);
+              setStartX(e.clientX);
+              setStartY(e.clientY);
+              if(newWidth < 0) {
+                setResizingDirection("ne")
+              }
+              if(newHeight < 0) setResizingDirection("sw");
+              break;
+            default:
+              break;
+          }
+            
+          setWidth(newWidth);
+          setHeight(newHeight);
+  
+          const copyElement = [...elements];
+  
+          copyElement[moveableActiveElement.id] = createElement({
+            id: moveableActiveElement.id, 
+            startX:startX, 
+            startY:startY, 
+            currentX: width + startX, 
+            currentY: height + startY, 
+            type: moveableActiveElement.type
+          });
+
+          setElements(copyElement);
+        }
+
+        if(moveableActiveElement.type === 'TEXT') {
+
+          switch (resizingDirection) {
+            case 'move':
+            
+            break;
+            default:
+              break;
+          }
+            
+          setWidth(newWidth);
+          setHeight(newHeight);
+  
+          const copyElement = [...elements];
+  
+          copyElement[moveableActiveElement.id] = {
+            id: moveableActiveElement.id, 
+            startX: startX, 
+            startY: startY + 5, 
+            text: moveableActiveElement.text, 
+            width: moveableActiveElement.text.length*12, 
+            height: 18, 
+            type: 'TEXT'
+          }
+
+          setElements(copyElement);
+        }
+
+
+
+
         
         
 
@@ -131,8 +288,8 @@ function BoundingBox() {
     <div
     ref={resizeComp} 
     style={{
-      top: `${ startY - 10}px` ,
-      left: `${startX - 10}px`,
+      top: `${ moveableActiveElement?.type == 'CIRCLE' ? startY - height/2 - 10 :startY - 10}px` ,
+      left: `${moveableActiveElement?.type == 'CIRCLE' ? startX - width/2 - 10 :startX - 10}px`,
       width: `${Math.abs(width) + 20}px`,
       height: `${Math.abs(height) + 20}px`,
     }}
