@@ -63,6 +63,14 @@ export default function  setActiveElement({elements , setElements,moveableActive
             const width = element.startX + element.text.length * 12
             
             if(element.startX <= x && x <= width && y <= element.startY && y >= element.startY - 20 ) {
+                element = {
+                    id: element.id, 
+                    startX: element.startX, 
+                    startY: element.startY - 15, 
+                    text: element.text, 
+                    width: element.width, 
+                    height: element.height, 
+                    type: element.type}
                 setMoveableActiveElement(element);
                 foundElement = true;
             }

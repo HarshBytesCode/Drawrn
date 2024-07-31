@@ -211,35 +211,25 @@ function BoundingBox() {
             default:
               return;
           }
-            
-          setWidth(newWidth);
-          setHeight(newHeight);
   
           const copyElement = [...elements];
   
           copyElement[moveableActiveElement.id] = {
             id: moveableActiveElement.id, 
             startX: startX, 
-            startY: startY + 5, 
+            startY: startY + 15, 
             text: moveableActiveElement.text, 
             width: moveableActiveElement.text.length*12, 
-            height: 18, 
+            height: 15, 
             type: 'TEXT'
           }
 
           setElements(copyElement);
         }
-
-
-
-
-        
-        
-
       }
       
-      
     }
+    
     function handleMouseUp(e: MouseEvent) {
       setIsMoving(false)
       setResizingDirection('')
@@ -301,8 +291,8 @@ function BoundingBox() {
     style={{
       top: `${ moveableActiveElement?.type == 'CIRCLE' ? startY - height - 10 :startY - 10}px` ,
       left: `${moveableActiveElement?.type == 'CIRCLE' ? startX - width - 10 :startX - 10}px`,
-      width: `${2*(Math.abs(width)) + 20}px`,
-      height: `${2*(Math.abs(height)) + 20}px`,
+      width: `${moveableActiveElement?.type == 'CIRCLE' ? 2*(Math.abs(width)) + 20 : Math.abs(width) + 20}px`,
+      height: `${moveableActiveElement?.type == 'CIRCLE' ? 2*(Math.abs(height)) + 20 : Math.abs(height) + 20}px`,
     }}
     className={`${moveableActiveElement ? 'absolute' : 'hidden'} bg-transparent border z-40 border-lime-500 cursor-move`}
     onMouseDown={(e) => handleMouseDown({e:e, direction: 'move'})}
