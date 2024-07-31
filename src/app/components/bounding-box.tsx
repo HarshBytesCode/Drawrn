@@ -35,13 +35,18 @@ function BoundingBox() {
       if(isMoving) {
         let newWidth = width;
         let newHeight = height;
-
-        if(moveableActiveElement.type === 'SQUARE') {
+        const clientX = e.clientX + window.scrollX;
+        const clientY = e.clientY + window.scrollY;
+        if(moveableActiveElement?.type === 'SQUARE') {
 
           switch (resizingDirection) {
+            case 'move':
+              setStartX(clientX);
+              setStartY(clientY);
+              break;
             case 'se':
-              newWidth = e.clientX - startX; 
-              newHeight = e.clientY - startY;
+              newWidth = clientX - startX; 
+              newHeight = clientY - startY;
   
               if(newWidth < 0) {
                 setResizingDirection("sw")
@@ -49,35 +54,35 @@ function BoundingBox() {
               if(newHeight < 0) setResizingDirection("ne");
               break;
             case 'ne':
-              newWidth = e.clientX - startX;
-              newHeight = height - (e.clientY - startY);
-              setStartY(e.clientY);
+              newWidth = clientX - startX;
+              newHeight = height - (clientY - startY);
+              setStartY(clientY);
               if(newWidth < 0) {
                 setResizingDirection("nw")
               }
               if(newHeight < 0) setResizingDirection("se");
               break;
             case 'sw':
-              newWidth = width - (e.clientX - startX)
-              newHeight = e.clientY - startY
-              setStartX(e.clientX)
+              newWidth = width - (clientX - startX)
+              newHeight = clientY - startY
+              setStartX(clientX)
               if(newWidth < 0) {
                 setResizingDirection("se")
               }
               if(newHeight < 0) setResizingDirection("nw");
               break;
             case 'nw':
-              newWidth = width - (e.clientX - startX);
-              newHeight = height - (e.clientY - startY);
-              setStartX(e.clientX);
-              setStartY(e.clientY);
+              newWidth = width - (clientX - startX);
+              newHeight = height - (clientY - startY);
+              setStartX(clientX);
+              setStartY(clientY);
               if(newWidth < 0) {
                 setResizingDirection("ne")
               }
               if(newHeight < 0) setResizingDirection("sw");
               break;
             default:
-              break;
+              return;
           }
             
           setWidth(newWidth);
@@ -97,12 +102,16 @@ function BoundingBox() {
           setElements(copyElement);
         }
 
-        if(moveableActiveElement.type === 'CIRCLE') {
+        if(moveableActiveElement?.type === 'CIRCLE') {
 
           switch (resizingDirection) {
+            case 'move':
+              setStartX(clientX);
+              setStartY(clientY);
+              break;
             case 'se':
-              newWidth = e.clientX - startX; 
-              newHeight = e.clientY - startY;
+              newWidth = clientX - startX; 
+              newHeight = clientY - startY;
   
               if(newWidth < 0) {
                 setResizingDirection("sw")
@@ -110,35 +119,35 @@ function BoundingBox() {
               if(newHeight < 0) setResizingDirection("ne");
               break;
             case 'ne':
-              newWidth = e.clientX - startX;
-              newHeight = height - (e.clientY - startY);
-              setStartY(e.clientY);
+              newWidth = clientX - startX;
+              newHeight = height - (clientY - startY);
+              setStartY(clientY);
               if(newWidth < 0) {
                 setResizingDirection("nw")
               }
               if(newHeight < 0) setResizingDirection("se");
               break;
             case 'sw':
-              newWidth = width - (e.clientX - startX)
-              newHeight = e.clientY - startY
-              setStartX(e.clientX)
+              newWidth = width - (clientX - startX)
+              newHeight = clientY - startY
+              setStartX(clientX)
               if(newWidth < 0) {
                 setResizingDirection("se")
               }
               if(newHeight < 0) setResizingDirection("nw");
               break;
             case 'nw':
-              newWidth = width - (e.clientX - startX);
-              newHeight = height - (e.clientY - startY);
-              setStartX(e.clientX);
-              setStartY(e.clientY);
+              newWidth = width - (clientX - startX);
+              newHeight = height - (clientY - startY);
+              setStartX(clientX);
+              setStartY(clientY);
               if(newWidth < 0) {
                 setResizingDirection("ne")
               }
               if(newHeight < 0) setResizingDirection("sw");
               break;
             default:
-              break;
+              return;
           }
             
           setWidth(newWidth);
@@ -157,49 +166,22 @@ function BoundingBox() {
 
           setElements(copyElement);
         }
-
+        
         if(moveableActiveElement.type === 'ARROW') {
-
+          
           switch (resizingDirection) {
-            case 'se':
-              newWidth = e.clientX - startX; 
-              newHeight = e.clientY - startY;
-  
-              if(newWidth < 0) {
-                setResizingDirection("sw")
-              }
-              if(newHeight < 0) setResizingDirection("ne");
+            case 'e':
+              newWidth = clientX - startX; 
+              newHeight = clientY - startY;
               break;
-            case 'ne':
-              newWidth = e.clientX - startX;
-              newHeight = height - (e.clientY - startY);
-              setStartY(e.clientY);
-              if(newWidth < 0) {
-                setResizingDirection("nw")
-              }
-              if(newHeight < 0) setResizingDirection("se");
-              break;
-            case 'sw':
-              newWidth = width - (e.clientX - startX)
-              newHeight = e.clientY - startY
-              setStartX(e.clientX)
-              if(newWidth < 0) {
-                setResizingDirection("se")
-              }
-              if(newHeight < 0) setResizingDirection("nw");
-              break;
-            case 'nw':
-              newWidth = width - (e.clientX - startX);
-              newHeight = height - (e.clientY - startY);
-              setStartX(e.clientX);
-              setStartY(e.clientY);
-              if(newWidth < 0) {
-                setResizingDirection("ne")
-              }
-              if(newHeight < 0) setResizingDirection("sw");
+            case 'w':
+              newWidth = width - (clientX - startX);
+              newHeight = height -(clientY - startY);
+              setStartX(clientX);
+              setStartY(clientY);
               break;
             default:
-              break;
+              return;
           }
             
           setWidth(newWidth);
@@ -209,10 +191,10 @@ function BoundingBox() {
   
           copyElement[moveableActiveElement.id] = createElement({
             id: moveableActiveElement.id, 
-            startX:startX, 
-            startY:startY, 
-            currentX: width + startX, 
-            currentY: height + startY, 
+            startX: startX, 
+            startY: startY, 
+            currentX: startX + width, 
+            currentY: startY + height, 
             type: moveableActiveElement.type
           });
 
@@ -223,10 +205,11 @@ function BoundingBox() {
 
           switch (resizingDirection) {
             case 'move':
-            
-            break;
-            default:
+              setStartX(clientX);
+              setStartY(clientY);
               break;
+            default:
+              return;
           }
             
           setWidth(newWidth);
@@ -277,33 +260,70 @@ function BoundingBox() {
   
   function handleMouseDown({e, direction}: any) {
     setResizingDirection(direction)
-    setIsMoving(true)
-    
+    setIsMoving(true) 
   }
 
+  if (moveableActiveElement?.type == 'ARROW') {
+    
+    return (
+      <div
+      ref={resizeComp}
+      >
 
+        <div
+          style={{
+            top: `${startY - 5}px` ,
+            left: `${startX - 2}px`,
+          }}
+          onMouseDown={(e) => {
+            e.stopPropagation()
+            handleMouseDown({e:e, direction: 'w'})}}
+          className='absolute p-[4px] top-[5px] left-[15px] bg-lime-500 border border-lime-500 rounded-xl cursor-nw-resize '
+        />
+        <div
+          style={{
+            top: `${startY + height - 5}px` ,
+            left: `${startX + width - 2}px`,
+          }}
+          onMouseDown={(e) => {
+            e.stopPropagation()
+            handleMouseDown({e:e, direction: 'e'})}}
+          className='absolute p-[4px] top-[5px] left-[15px] bg-lime-500 border border-lime-500 rounded-xl cursor-nw-resize '
+        />
+      </div>
+    )
+  }
 
 
   return (
     <div
     ref={resizeComp} 
     style={{
-      top: `${ moveableActiveElement?.type == 'CIRCLE' ? startY - height/2 - 10 :startY - 10}px` ,
-      left: `${moveableActiveElement?.type == 'CIRCLE' ? startX - width/2 - 10 :startX - 10}px`,
-      width: `${Math.abs(width) + 20}px`,
-      height: `${Math.abs(height) + 20}px`,
+      top: `${ moveableActiveElement?.type == 'CIRCLE' ? startY - height - 10 :startY - 10}px` ,
+      left: `${moveableActiveElement?.type == 'CIRCLE' ? startX - width - 10 :startX - 10}px`,
+      width: `${2*(Math.abs(width)) + 20}px`,
+      height: `${2*(Math.abs(height)) + 20}px`,
     }}
-    className={`${moveableActiveElement ? 'absolute' : 'hidden'} bg-transparent border z-50 border-lime-500 cursor-move`}
+    className={`${moveableActiveElement ? 'absolute' : 'hidden'} bg-transparent border z-40 border-lime-500 cursor-move`}
+    onMouseDown={(e) => handleMouseDown({e:e, direction: 'move'})}
     >
         <div
-        onMouseDown={(e) => handleMouseDown({e:e, direction: 'nw'})}
+        onMouseDown={(e) => {
+          e.stopPropagation()
+          handleMouseDown({e:e, direction: 'nw'})}}
         className='absolute p-[3px] -top-[5px] -left-[5px] bg-black border border-lime-500 rounded-sm cursor-nw-resize '/>
         <div
-        onMouseDown={(e) => handleMouseDown({e:e, direction: 'ne'})} className='absolute p-[3px] -top-[5px] -right-[5px] bg-black border border-lime-500 cursor-ne-resize '/>
+        onMouseDown={(e) => {
+          e.stopPropagation()
+          handleMouseDown({e:e, direction: 'ne'})}} className='absolute p-[3px] -top-[5px] -right-[5px] bg-black border border-lime-500 cursor-ne-resize '/>
         <div
-        onMouseDown={(e) => handleMouseDown({e:e, direction: 'sw'})} className='absolute p-[3px] -bottom-[5px] -left-[5px] bg-black border border-lime-500 cursor-sw-resize'/>
+        onMouseDown={(e) => {
+          e.stopPropagation()
+          handleMouseDown({e:e, direction: 'sw'})}} className='absolute p-[3px] -bottom-[5px] -left-[5px] bg-black border border-lime-500 cursor-sw-resize'/>
         <div
-        onMouseDown={(e) => handleMouseDown({e:e, direction: 'se'})} className='absolute p-[3px] -bottom-[5px] -right-[5px] bg-black border border-lime-500 cursor-se-resize '/>
+        onMouseDown={(e) => {
+          e.stopPropagation()
+          handleMouseDown({e:e, direction: 'se'})}} className='absolute p-[3px] -bottom-[5px] -right-[5px] bg-black border border-lime-500 cursor-se-resize '/>
     </div>
   )
   

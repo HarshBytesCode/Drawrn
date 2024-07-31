@@ -17,7 +17,14 @@ export default function  setActiveElement({elements , setElements,moveableActive
         }
 
         if(element.type === 'ARROW') {
-            if(element.startX <= x <= element.endX && element.startY <= y <= element.endY ) {
+            
+            let startY, endY;
+            if(element.startY < element.endY) startY = element.startY;
+            else startY = element.endY;
+            if(element.endY > element.startY) endY = element.endY;
+            else endY = element.startY;
+
+            if(element.startX <= x && x <= element.endX && startY <= y && y <= endY ) {
                 setMoveableActiveElement(element);
                 foundElement = true;
             }
@@ -32,7 +39,7 @@ export default function  setActiveElement({elements , setElements,moveableActive
             
             const circleArea = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry)
 
-            if(circleArea <= 0.28) {
+            if(circleArea <= 1) {
 
                 element = {
                     id: element.id,

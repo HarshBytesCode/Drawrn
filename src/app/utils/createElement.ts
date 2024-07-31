@@ -58,7 +58,7 @@ export function createElement({id, startX, startY, currentX, currentY, type, emp
       }
     }
     if(type == 'CIRCLE') {
-      const roughElement = generator.ellipse(startX, startY, currentX-startX,currentY-startY, {stroke: 'white',strokeWidth: 1, roughness: 0} )
+      const roughElement = generator.ellipse(startX, startY, 2*(currentX-startX), 2*(currentY-startY), {stroke: 'white',strokeWidth: 1, roughness: 0} )
       return {
         id,
         startX,
