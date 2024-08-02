@@ -20,3 +20,8 @@ export const moveableActiveElementAtom = atom({
     key: 'moveableActiveElementAtom',
     default: null
 })
+
+export const strokeAtom = atom({
+    key: 'stroke',
+    default: '#fffdfb',
+})

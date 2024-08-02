@@ -50,7 +50,6 @@ export default function  setActiveElement({elements , setElements,moveableActive
                     roughElement: element.roughElement,
                     type: element.type,
                 }
-                console.log(element);
                 
                 setMoveableActiveElement(element);
                 foundElement = true;
@@ -59,7 +58,6 @@ export default function  setActiveElement({elements , setElements,moveableActive
         }
 
         if(element.type === 'TEXT') {
-            console.log(element);
             const width = element.startX + element.text.length * 12
             
             if(element.startX <= x && x <= width && y <= element.startY && y >= element.startY - 20 ) {

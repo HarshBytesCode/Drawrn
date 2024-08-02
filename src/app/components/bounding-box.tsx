@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { elementsAtom, moveableActiveElementAtom } from '../utils/atom';
 import { useRecoilState } from 'recoil';
 import { createElement } from '../utils/createElement';
-let onClickX, onClickY;
+import { Trash2 } from 'lucide-react';
+
 
 
 
@@ -20,6 +21,7 @@ function BoundingBox() {
   const resizeComp = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    
     if (moveableActiveElement) {
       setWidth(moveableActiveElement.width);
       setHeight(moveableActiveElement.height);
@@ -252,6 +254,12 @@ function BoundingBox() {
     setResizingDirection(direction)
     setIsMoving(true) 
   }
+// FIX TYPE
+  function handleDelete() {
+
+    setElements((prev) => prev.filter((element: any) => moveableActiveElement.id !== element.id))
+    setMoveableActiveElement(null)
+  }
 
   if (moveableActiveElement?.type == 'ARROW') {
     
@@ -313,7 +321,14 @@ function BoundingBox() {
         <div
         onMouseDown={(e) => {
           e.stopPropagation()
-          handleMouseDown({e:e, direction: 'se'})}} className='absolute p-[3px] -bottom-[5px] -right-[5px] bg-black border border-lime-500 cursor-se-resize '/>
+          handleMouseDown({e:e, direction: 'se'})}} 
+          className='absolute p-[3px] -bottom-[5px] -right-[5px] bg-black border border-lime-500 cursor-se-resize '/>
+        <button
+        className='absolute p-[3px] top-[5px] -right-10 transform  text-red-400'
+        onClick={handleDelete}
+        >
+          <Trash2/>
+        </button>
     </div>
   )
   
