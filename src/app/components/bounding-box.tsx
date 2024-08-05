@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
-import { elementsAtom, moveableActiveElementAtom } from '../utils/atom';
-import { useRecoilState } from 'recoil';
+import { elementsAtom, moveableActiveElementAtom, strokeAtom, strokeStyleAtom, strokeWidthAtom } from '../utils/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { createElement } from '../utils/createElement';
 import { Trash2 } from 'lucide-react';
 
@@ -19,9 +19,12 @@ function BoundingBox() {
   const [height, setHeight] = useState(0);
   const [resizingDirection, setResizingDirection] = useState('');
   const resizeComp = useRef<HTMLDivElement>(null);
+  const [stroke, setStroke] = useRecoilState(strokeAtom);
+  const strokeWidth = useRecoilValue(strokeWidthAtom);
+  const strokeStyle = useRecoilValue(strokeStyleAtom);
 
   useEffect(() => {
-    
+
     if (moveableActiveElement) {
       setWidth(moveableActiveElement.width);
       setHeight(moveableActiveElement.height);
@@ -98,7 +101,11 @@ function BoundingBox() {
             startY:startY, 
             currentX: width, 
             currentY: height, 
-            type: moveableActiveElement.type
+            type: moveableActiveElement.type,
+            stroke,
+            strokeWidth,
+            strokeStyle
+            
           });
 
           setElements(copyElement);
@@ -163,7 +170,10 @@ function BoundingBox() {
             startY: startY, 
             currentX: width + startX, 
             currentY: height + startY, 
-            type: moveableActiveElement.type
+            type: moveableActiveElement.type,
+            stroke,
+            strokeWidth,
+            strokeStyle
           });
 
           setElements(copyElement);
@@ -197,7 +207,10 @@ function BoundingBox() {
             startY: startY, 
             currentX: startX + width, 
             currentY: startY + height, 
-            type: moveableActiveElement.type
+            type: moveableActiveElement.type,
+            stroke,
+            strokeWidth,
+            strokeStyle
           });
 
           setElements(copyElement);
@@ -223,7 +236,7 @@ function BoundingBox() {
             text: moveableActiveElement.text, 
             width: moveableActiveElement.text.length*12, 
             height: 15, 
-            type: 'TEXT'
+            type: 'TEXT',
           }
 
           setElements(copyElement);
@@ -248,7 +261,7 @@ function BoundingBox() {
       document.removeEventListener('mouseup', handleMouseUp)
     }
     
-  }, [isMoving, elements, resizingDirection, width, height, startX, startY])
+  }, [isMoving, elements, resizingDirection, width, height, startX, startY, stroke, strokeWidth, strokeStyle])
   
   function handleMouseDown({e, direction}: any) {
     setResizingDirection(direction)

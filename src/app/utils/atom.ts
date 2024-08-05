@@ -25,3 +25,13 @@ export const strokeAtom = atom({
     key: 'stroke',
     default: '#fffdfb',
 })
+
+export const strokeWidthAtom = atom({
+    key: 'strokeWidth',
+    default: 1,
+})
+
+export const strokeStyleAtom = atom({
+    key: 'strokeStyle',
+    default: 0,
+})

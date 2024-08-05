@@ -57,7 +57,7 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
 }
 
 // Fix type
-export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveableActiveElement, setMoveableActiveElement, stroke}: {e:any, tool:string,elements:any , setElements: any, setIsWriting:any,moveableActiveElement: any , setMoveableActiveElement: any, stroke: string}) => {
+export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveableActiveElement, setMoveableActiveElement, stroke, strokeWidth, strokeStyle}: {e:any, tool:string,elements:any , setElements: any, setIsWriting:any,moveableActiveElement: any , setMoveableActiveElement: any, stroke: string, strokeWidth: number, strokeStyle: number}) => {
   const x = e.clientX + window.scrollX;
   const y = e.clientY + window.scrollY;
   let id: number;
@@ -67,7 +67,7 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
   
 
   if(tool ==='PEN') {
-    const element = createElement({id: id , startX:x, startY:y, type: tool, stroke});
+    const element = createElement({id: id , startX:x, startY:y, type: tool, stroke, strokeWidth});
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
   }
@@ -79,13 +79,13 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
 
   if(tool === 'ARROW') {
     
-    const element = createElement({id: id, startX:x, startY:y, currentX: x, currentY: y, type: tool, stroke })
+    const element = createElement({id: id, startX:x, startY:y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle })
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
   }
   
   if(tool === 'SQUARE') {
-    const element = createElement({id: id, startX:x, startY:y, currentX: x - x, currentY: y - y, type: tool, stroke});
+    const element = createElement({id: id, startX:x, startY:y, currentX: x - x, currentY: y - y, type: tool, stroke, strokeWidth, strokeStyle});
     
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
@@ -93,36 +93,36 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
   }
 
   if(tool === 'CIRCLE') {
-    const element = createElement({id: id, startX: x, startY: y, currentX: x, currentY: y, type: tool, stroke})
+    const element = createElement({id: id, startX: x, startY: y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle})
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
   }
   
 }
 
-export const MouseMove = ({e, tool, elements , setElements, stroke}: {e:any, tool:string, elements:any, setElements: any, stroke: string}) => {
+export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth, strokeStyle}: {e:any, tool:string, elements:any, setElements: any, stroke: string, strokeWidth: number, strokeStyle: number}) => {
   const x = e.clientX + window.scrollX;
   const y = e.clientY + window.scrollY;
   if(activeElement) {
     const copyElement = [...elements]
 
     if(tool == 'PEN') {
-      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:x, startY:y, type: tool, stroke});
+      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:x, startY:y, type: tool, stroke, strokeWidth});
       setElements(copyElement)
     }
 
     if(tool == 'ARROW') {
-      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool, stroke});
+      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle});
       setElements(copyElement)
     }
     
     if(tool === 'SQUARE' && activeElement && copyElement) {
-      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x - activeElement.x, currentY: y - activeElement.y, type: tool, stroke});
+      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x - activeElement.x, currentY: y - activeElement.y, type: tool, stroke, strokeWidth, strokeStyle});
       setElements(copyElement);
     }
 
     if(tool === 'CIRCLE' && activeElement && copyElement) {
-      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool, stroke});
+      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle});
       setElements(copyElement);
     }
     

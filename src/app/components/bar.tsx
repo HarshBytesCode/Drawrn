@@ -53,10 +53,10 @@ function Bar() {
           setTool('TEXT');
         }}
         />
-        <Eraser 
+        {/* <Eraser 
         size={40} 
         strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "ERASER" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}/>
+        className={` hover:bg-gray-950 ${tool === "ERASER" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}/> */}
         <Trash2 
         size={40} 
         strokeWidth={2} 
