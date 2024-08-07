@@ -55,13 +55,13 @@ function BoundingBox() {
           
           switch (resizingDirection) {
             case 'move':
-              const moveX = clientX - onClickX;
-              const moveY = clientY - onClickY;
+              const moveX = clientX - onClickX ;
+              const moveY = clientY - onClickY ;
               
               setStartX(startX + moveX);
               setStartY(startY + moveY);
-              setBoundingBoxStartX(startX + moveX);
-              setBoundingBoxStartY(startY + moveY);
+              setBoundingBoxStartX(startX + moveX + offset.x);
+              setBoundingBoxStartY(startY + moveY + offset.y);
               setOnClickX(clientX);
               setOnClickY(clientY);
               break;
@@ -298,8 +298,8 @@ function BoundingBox() {
   function handleMouseDown({e, direction}: any) {
     setResizingDirection(direction)
     setIsMoving(true)
-    setOnClickX(e.clientX);
-    setOnClickY(e.clientY); 
+    setOnClickX(e.clientX - offset.x);
+    setOnClickY(e.clientY - offset.y); 
     
   }
 // FIX TYPE
