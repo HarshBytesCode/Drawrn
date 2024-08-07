@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import  { draw, MouseDown, MouseMove, MouseUp } from '../utils/draw'
 import Bar from '../components/bar';
 import UtilBar from '../components/util-bar'
@@ -21,7 +21,27 @@ function Canvas() {
   const strokeStyle = useRecoilValue(strokeStyleAtom);
   const [offset, setOffset] = useRecoilState(offsetAtom);
 
-  draw(canvasRef)
+  useEffect(() => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      // Update canvas dimensions on window resize
+      const handleResize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        draw({ canvasRef, elements, offset });
+      };
+
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [canvasRef, elements, offset]);
+
+  draw({canvasRef, elements, offset})
     
   return (
     <div>
@@ -30,8 +50,6 @@ function Canvas() {
       onMouseDown={(e) => MouseDown({e, tool,elements , setElements, setIsWriting,moveableActiveElement , setMoveableActiveElement, stroke, strokeWidth, strokeStyle, offset})}
       onMouseUp={(e) => MouseUp({e, tool})}
       onMouseMove={(e) => MouseMove({e, tool, elements, setElements, stroke, strokeWidth, strokeStyle, offset, setOffset})}
-      width={window?.innerWidth} 
-      height={window?.innerHeight} 
       className='bg-black'
       />
       <Bar/>

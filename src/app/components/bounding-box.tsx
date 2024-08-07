@@ -39,7 +39,7 @@ function BoundingBox() {
       setBoundingBoxStartY(moveableActiveElement.startY + offset.y);
     }
     
-  }, [moveableActiveElement]);
+  }, [moveableActiveElement, offset.x, offset.y]);
 
 
   useEffect(() => {
@@ -293,7 +293,7 @@ function BoundingBox() {
       document.removeEventListener('mouseup', handleMouseUp)
     }
     
-  }, [isMoving, elements, resizingDirection, width, height, startX, startY, stroke, strokeWidth, strokeStyle])
+  }, [isMoving, elements, resizingDirection, width, height, startX, startY, stroke, strokeWidth, strokeStyle, moveableActiveElement.id, moveableActiveElement.text, moveableActiveElement.type, offset.x, offset.y, onClickX, onClickY, setElements])
   
   function handleMouseDown({e, direction}: any) {
     setResizingDirection(direction)

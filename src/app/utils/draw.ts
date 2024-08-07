@@ -8,10 +8,12 @@ import setActiveElement from "./setActiveElement";
 let activeElement:{id: number, x: number, y: number} | null;
 let rc:any;
 
-export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
-  const [elements, setElements] = useRecoilState(elementsAtom);
+export const draw = ({canvasRef, elements, offset} : {
+  canvasRef: RefObject<HTMLCanvasElement>,
+  elements: any,
+  offset: any
+}) => {
   const ctx = canvasRef.current?.getContext("2d");
-  const [offset, setOffset] = useRecoilState(offsetAtom);
 
   if(canvasRef.current){
     rc = rough.canvas(canvasRef.current)

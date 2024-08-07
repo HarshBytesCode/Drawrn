@@ -34,7 +34,7 @@ function UtilBar() {
         
         setElements(copyElement);
 
-    }, [Stroke, StrokeWidth, StrokeStyle, moveableActiveElement])
+    }, [Stroke, StrokeWidth, StrokeStyle, moveableActiveElement, elements, setElements])
     
 
   return (

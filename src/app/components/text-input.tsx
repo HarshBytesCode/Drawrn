@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { activeToolAtom, elementsAtom, isWritingAtom, offsetAtom } from '../utils/atom'
@@ -70,7 +71,7 @@ function TextInput({canvasRef}: any) {
 
         canvasRef.current.removeEventListener('mousedown', handleMouseDown )
       }
-    }, [tool])
+    }, [tool, canvasRef, setIsWriting])
 
   return (
     <input 
