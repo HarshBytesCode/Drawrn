@@ -1,7 +1,7 @@
 'use client'
 import { RefObject } from "react";
 import { useRecoilState } from "recoil";
-import {  elementsAtom } from "./atom";
+import {  elementsAtom, offsetAtom } from "./atom";
 import rough from 'roughjs';
 import { createElement } from "./createElement";
 import setActiveElement from "./setActiveElement";
@@ -11,6 +11,7 @@ let rc:any;
 export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const [elements, setElements] = useRecoilState(elementsAtom);
   const ctx = canvasRef.current?.getContext("2d");
+  const [offset, setOffset] = useRecoilState(offsetAtom);
 
   if(canvasRef.current){
     rc = rough.canvas(canvasRef.current)
@@ -19,6 +20,11 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
   // @ts-ignore
   ctx?.clearRect(0,0, canvasRef.current?.width, canvasRef.current?.height)
 
+  ctx?.save()
+  ctx?.translate(
+    offset.x,
+    offset.y
+  )
   elements.forEach((element: any) => {
 
     if(!element) {
@@ -52,21 +58,26 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
       
     }
   })
+
+  ctx?.restore();
   
   
 }
 
 // Fix type
-export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveableActiveElement, setMoveableActiveElement, stroke, strokeWidth, strokeStyle}: {e:any, tool:string,elements:any , setElements: any, setIsWriting:any,moveableActiveElement: any , setMoveableActiveElement: any, stroke: string, strokeWidth: number, strokeStyle: number}) => {
-  const x = e.clientX + window.scrollX;
-  const y = e.clientY + window.scrollY;
+export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveableActiveElement, setMoveableActiveElement, stroke, strokeWidth, strokeStyle, offset}: {e:any, tool:string,elements:any , setElements: any, setIsWriting:any,moveableActiveElement: any , setMoveableActiveElement: any, stroke: string, strokeWidth: number, strokeStyle: number, offset: any}) => {
+  const x = e.clientX - offset.x;
+  const y = e.clientY - offset.y;
   let id: number;
   if(elements.length === 0) {
     id = elements.length + 1
   } else id = elements.length
   
+  if(tool === 'PAN') {
+    activeElement = {id: 999999, x: e.clientX,y: e.clientY};
+  }
 
-  if(tool ==='PEN') {
+  if(tool === 'PEN') {
     const element = createElement({id: id , startX:x, startY:y, type: tool, stroke, strokeWidth});
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
@@ -74,7 +85,7 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
 
   if(tool === 'SELECTION') {
     
-    setActiveElement({elements, setElements,moveableActiveElement , setMoveableActiveElement, x, y })
+    setActiveElement({elements, setElements,moveableActiveElement , setMoveableActiveElement, x, y, offset })
   }
 
   if(tool === 'ARROW') {
@@ -100,11 +111,26 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
   
 }
 
-export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth, strokeStyle}: {e:any, tool:string, elements:any, setElements: any, stroke: string, strokeWidth: number, strokeStyle: number}) => {
-  const x = e.clientX + window.scrollX;
-  const y = e.clientY + window.scrollY;
+export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth, strokeStyle, offset, setOffset}: {e:any, tool:string, elements:any, setElements: any, stroke: string, strokeWidth: number, strokeStyle: number,offset:any, setOffset: any}) => {
+  const x = e.clientX - offset.x;
+  const y = e.clientY - offset.y;
+  
   if(activeElement) {
     const copyElement = [...elements]
+    
+    if(tool === 'PAN') {
+      const dx = e.clientX - activeElement.x;
+      const dy = e.clientY - activeElement.y;
+      
+      setOffset({
+        x: offset.x + dx,
+        y: offset.y + dy,
+      });
+      activeElement.x = e.clientX;
+      activeElement.y = e.clientY;
+      
+      return;
+    }
 
     if(tool == 'PEN') {
       copyElement[activeElement.id] = createElement({id: activeElement.id, startX:x, startY:y, type: tool, stroke, strokeWidth});

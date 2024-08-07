@@ -35,3 +35,8 @@ export const strokeStyleAtom = atom({
     key: 'strokeStyle',
     default: 0,
 })
+
+export const offsetAtom = atom({
+    key: 'offsetAtom',
+    default: {x:0, y:0}
+})

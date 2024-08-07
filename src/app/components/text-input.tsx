@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { activeToolAtom, elementsAtom, isWritingAtom } from '../utils/atom'
+import { activeToolAtom, elementsAtom, isWritingAtom, offsetAtom } from '../utils/atom'
 import { createElement } from '../utils/createElement';
 let x:number | null,y:number | null;
 function TextInput({canvasRef}: any) {
     const [isWriting, setIsWriting] = useRecoilState(isWritingAtom);
     const [elements, setElements] = useRecoilState(elementsAtom);
     const [tool, setTool] = useRecoilState(activeToolAtom);
+    const [offset, setOffset] = useRecoilState(offsetAtom);
     const inputRef = useRef<HTMLInputElement>(null);
     let id: number;
     if(elements.length === 0) {
@@ -28,7 +29,7 @@ function TextInput({canvasRef}: any) {
 
         }
         if(x && y) {
-            const element = {id, startX: x + window.scrollX, startY: y + window.scrollY + 5, text: e.target.value, width: e.target.value.length*12, height: 15, type: 'TEXT'}
+            const element = {id, startX: x - offset.x, startY: y -offset.y + 5, text: e.target.value, width: e.target.value.length*12, height: 15, type: 'TEXT'}
             // @ts-ignore
             setElements([...elements, element ])
             e.target.value = ''

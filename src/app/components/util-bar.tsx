@@ -1,6 +1,6 @@
 
-import { BoxSelect, Ellipsis, Menu, Minus, Square } from 'lucide-react';
-import React, { useEffect } from 'react'
+import { BoxSelect, Menu, Minus, Square } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeToolAtom, strokeAtom, strokeWidthAtom, strokeStyleAtom, elementsAtom, moveableActiveElementAtom } from '../utils/atom';
 import { createElement } from '../utils/createElement';
@@ -12,12 +12,13 @@ function UtilBar() {
     const [StrokeWidth, setStrokeWidth] = useRecoilState(strokeWidthAtom);
     const [StrokeStyle, setStrokeStyle] = useRecoilState(strokeStyleAtom);
     const tool = useRecoilValue(activeToolAtom);
+    const [utilBarVisible, setUtilBarVisible] = useState(false);
 
     useEffect(() => {
         const copyElement = [...elements];
         
         if(!moveableActiveElement) return
-        
+        // @ts-ignore
         copyElement[moveableActiveElement.id] = createElement({
             id: moveableActiveElement.id, 
             startX: moveableActiveElement.startX, 
@@ -40,8 +41,10 @@ function UtilBar() {
     <div
     className='text-white'
     >
-        <Menu size={40} className='fixed top-4 left-3 p-2 bg-gray-900 rounded-lg text-white'/>
-        <div className='fixed flex flex-col space-y-3 top-20 left-3 p-6 w-[11vw] rounded-xl bg-gray-900'>
+        <Menu size={40} className='fixed top-4 left-3 p-2 bg-gray-900 rounded-lg text-white'
+        onClick={() => setUtilBarVisible((prev) => !prev)}
+        />
+        <div className={`fixed flex flex-col space-y-3 top-20 ${utilBarVisible || moveableActiveElement ? " left-3" : " -left-96"} p-6 transition-all w-[11vw] rounded-xl bg-gray-900`}>
             <div>   
                 <p className='text-sm mb-1'>Stroke</p>
                 <div className='flex space-x-2'>

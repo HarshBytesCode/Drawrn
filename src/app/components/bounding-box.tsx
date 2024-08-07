@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
-import { elementsAtom, moveableActiveElementAtom, strokeAtom, strokeStyleAtom, strokeWidthAtom } from '../utils/atom';
+import { elementsAtom, moveableActiveElementAtom, offsetAtom, strokeAtom, strokeStyleAtom, strokeWidthAtom } from '../utils/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { createElement } from '../utils/createElement';
 import { Trash2 } from 'lucide-react';
@@ -17,8 +17,11 @@ function BoundingBox() {
   const [startY, setStartY] = useState(0);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
+  const [boundingBoxStartX, setBoundingBoxStartX] = useState(0);
+  const [boundingBoxStartY, setBoundingBoxStartY] = useState(0);
   const [resizingDirection, setResizingDirection] = useState('');
   const resizeComp = useRef<HTMLDivElement>(null);
+  const [offset, setOffset] = useRecoilState(offsetAtom);
   const [stroke, setStroke] = useRecoilState(strokeAtom);
   const strokeWidth = useRecoilValue(strokeWidthAtom);
   const strokeStyle = useRecoilValue(strokeStyleAtom);
@@ -29,7 +32,9 @@ function BoundingBox() {
       setWidth(moveableActiveElement.width);
       setHeight(moveableActiveElement.height);
       setStartX(moveableActiveElement.startX);
-      setStartY(moveableActiveElement.startY)
+      setStartY(moveableActiveElement.startY);
+      setBoundingBoxStartX(moveableActiveElement.startX + offset.x);
+      setBoundingBoxStartY(moveableActiveElement.startY + offset.y);
     }
   }, [moveableActiveElement]);
 
@@ -40,14 +45,16 @@ function BoundingBox() {
       if(isMoving) {
         let newWidth = width;
         let newHeight = height;
-        const clientX = e.clientX + window.scrollX;
-        const clientY = e.clientY + window.scrollY;
+        const clientX = e.clientX - offset.x;
+        const clientY = e.clientY - offset.y;
         if(moveableActiveElement?.type === 'SQUARE') {
 
           switch (resizingDirection) {
             case 'move':
               setStartX(clientX);
               setStartY(clientY);
+              setBoundingBoxStartX(clientX + offset.x);
+              setBoundingBoxStartY(clientY + offset.y);
               break;
             case 'se':
               newWidth = clientX - startX; 
@@ -62,6 +69,7 @@ function BoundingBox() {
               newWidth = clientX - startX;
               newHeight = height - (clientY - startY);
               setStartY(clientY);
+              setBoundingBoxStartY(clientY + offset.y);
               if(newWidth < 0) {
                 setResizingDirection("nw")
               }
@@ -70,7 +78,8 @@ function BoundingBox() {
             case 'sw':
               newWidth = width - (clientX - startX)
               newHeight = clientY - startY
-              setStartX(clientX)
+              setStartX(clientX);
+              setBoundingBoxStartX(clientX + offset.x);
               if(newWidth < 0) {
                 setResizingDirection("se")
               }
@@ -81,6 +90,8 @@ function BoundingBox() {
               newHeight = height - (clientY - startY);
               setStartX(clientX);
               setStartY(clientY);
+              setBoundingBoxStartX(clientX + offset.x);
+              setBoundingBoxStartY(clientY + offset.y);
               if(newWidth < 0) {
                 setResizingDirection("ne")
               }
@@ -94,7 +105,7 @@ function BoundingBox() {
           setHeight(newHeight);
   
           const copyElement = [...elements];
-  
+  // @ts-ignore type
           copyElement[moveableActiveElement.id] = createElement({
             id: moveableActiveElement.id, 
             startX:startX, 
@@ -117,6 +128,8 @@ function BoundingBox() {
             case 'move':
               setStartX(clientX);
               setStartY(clientY);
+              setBoundingBoxStartX(clientX + offset.x);
+              setBoundingBoxStartY(clientY + offset.y);
               break;
             case 'se':
               newWidth = clientX - startX; 
@@ -139,7 +152,8 @@ function BoundingBox() {
             case 'sw':
               newWidth = width - (clientX - startX)
               newHeight = clientY - startY
-              setStartX(clientX)
+              setStartX(clientX);
+              setBoundingBoxStartX(clientX + offset.x);
               if(newWidth < 0) {
                 setResizingDirection("se")
               }
@@ -150,6 +164,8 @@ function BoundingBox() {
               newHeight = height - (clientY - startY);
               setStartX(clientX);
               setStartY(clientY);
+              setBoundingBoxStartX(clientX + offset.x);
+              setBoundingBoxStartY(clientY + offset.y);
               if(newWidth < 0) {
                 setResizingDirection("ne")
               }
@@ -163,7 +179,7 @@ function BoundingBox() {
           setHeight(newHeight);
   
           const copyElement = [...elements];
-          
+          // @ts-ignore
           copyElement[moveableActiveElement.id] = createElement({
             id: moveableActiveElement.id, 
             startX: startX, 
@@ -191,6 +207,8 @@ function BoundingBox() {
               newHeight = height -(clientY - startY);
               setStartX(clientX);
               setStartY(clientY);
+              setBoundingBoxStartX(clientX + offset.x);
+              setBoundingBoxStartY(clientY + offset.y);
               break;
             default:
               return;
@@ -200,7 +218,7 @@ function BoundingBox() {
           setHeight(newHeight);
   
           const copyElement = [...elements];
-  
+  // @ts-ignore
           copyElement[moveableActiveElement.id] = createElement({
             id: moveableActiveElement.id, 
             startX: startX, 
@@ -222,13 +240,15 @@ function BoundingBox() {
             case 'move':
               setStartX(clientX);
               setStartY(clientY);
+              setBoundingBoxStartX(clientX + offset.x);
+              setBoundingBoxStartY(clientY + offset.y);
               break;
             default:
               return;
           }
   
           const copyElement = [...elements];
-  
+  // @ts-ignore
           copyElement[moveableActiveElement.id] = {
             id: moveableActiveElement.id, 
             startX: startX, 
@@ -283,8 +303,8 @@ function BoundingBox() {
 
         <div
           style={{
-            top: `${startY - 5}px` ,
-            left: `${startX - 2}px`,
+            top: `${boundingBoxStartY - 5}px` ,
+            left: `${boundingBoxStartX - 2}px`,
           }}
           onMouseDown={(e) => {
             e.stopPropagation()
@@ -293,8 +313,8 @@ function BoundingBox() {
         />
         <div
           style={{
-            top: `${startY + height - 5}px` ,
-            left: `${startX + width - 2}px`,
+            top: `${boundingBoxStartY + height - 5}px` ,
+            left: `${boundingBoxStartX + width - 2}px`,
           }}
           onMouseDown={(e) => {
             e.stopPropagation()
@@ -310,8 +330,8 @@ function BoundingBox() {
     <div
     ref={resizeComp} 
     style={{
-      top: `${ moveableActiveElement?.type == 'CIRCLE' ? startY - height - 10 :startY - 10}px` ,
-      left: `${moveableActiveElement?.type == 'CIRCLE' ? startX - width - 10 :startX - 10}px`,
+      top: `${ moveableActiveElement?.type == 'CIRCLE' ? boundingBoxStartY - height - 10 :boundingBoxStartY - 10}px` ,
+      left: `${moveableActiveElement?.type == 'CIRCLE' ? boundingBoxStartX - width - 10 :boundingBoxStartX - 10}px`,
       width: `${moveableActiveElement?.type == 'CIRCLE' ? 2*(Math.abs(width)) + 20 : Math.abs(width) + 20}px`,
       height: `${moveableActiveElement?.type == 'CIRCLE' ? 2*(Math.abs(height)) + 20 : Math.abs(height) + 20}px`,
     }}

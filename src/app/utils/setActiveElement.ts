@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
 import { elementsAtom, moveableActiveElementAtom } from "./atom";
 
-export default function  setActiveElement({elements , setElements,moveableActiveElement, setMoveableActiveElement, x, y}: {elements:any , setElements: any,moveableActiveElement: any , setMoveableActiveElement: any, x:number, y:number}) {
+export default function  setActiveElement({elements , setElements,moveableActiveElement, setMoveableActiveElement, x, y, offset}: {elements:any , setElements: any,moveableActiveElement: any , setMoveableActiveElement: any, x:number, y:number, offset:any}) {
     
     let foundElement;
 
@@ -10,9 +10,13 @@ export default function  setActiveElement({elements , setElements,moveableActive
         if(element.type === 'SQUARE') {
             
             
-            if(element.startX <= x && x <= element.startX + element.width && element.startY <= y && y <= element.startY + element.height ) {
+            if(element.startX <= x && 
+                x <= element.startX + element.width && 
+                element.startY <= y && 
+                y <= element.startY + element.height ) {
                 setMoveableActiveElement(element);
                 foundElement = true;
+                
             }
         }
 
@@ -49,6 +53,9 @@ export default function  setActiveElement({elements , setElements,moveableActive
                     height: element.radiusY,
                     roughElement: element.roughElement,
                     type: element.type,
+                    stroke: element.stroke,
+                    strokeWidth: element.strokeWidth,
+                    strokeStyle: element.strokeStyle
                 }
                 
                 setMoveableActiveElement(element);

@@ -1,5 +1,5 @@
 'use client'
-import { CaseUpper, Circle, Eraser, Minus, MousePointer, MoveUpRight, Pen, Square, Trash2 } from 'lucide-react'
+import { CaseUpper, Circle, Eraser, Hand, Minus, MousePointer, MoveUpRight, Pen, Square, Trash2 } from 'lucide-react'
 import React from 'react'
 import {activeToolAtom, elementsAtom, isWritingAtom, moveableActiveElementAtom} from '../utils/atom'
 import { useRecoilState } from 'recoil';
@@ -15,54 +15,60 @@ function Bar() {
       setMoveableActiveElement(null)
       setIsWriting(false)}}
     >
-        <Pen 
-        size={40}
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "PEN" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setTool('PEN')}
-        />
-        <MousePointer 
-        size={40}
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "SELECTION" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setTool('SELECTION')}
-        />
-        <Minus 
-        size={40} 
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "ARROW" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setTool('ARROW')}
-        />
-        <Square 
-        size={40} 
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "SQUARE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setTool('SQUARE')}
-        />
-        <Circle 
-        size={40} 
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "CIRCLE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setTool('CIRCLE')}
-        />
-        <CaseUpper 
-        size={40} 
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "TEXT" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => {
-          setTool('TEXT');
-        }}
-        />
-        {/* <Eraser 
-        size={40} 
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "ERASER" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}/> */}
-        <Trash2 
-        size={40} 
-        strokeWidth={2} 
-        className={` hover:bg-gray-950 ${tool === "CLEAR" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
-        onClick={() => setElements([])}
-        />
+      <Hand
+      size={40}
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "PAN" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => setTool('PAN')}
+      />
+      <Pen 
+      size={40}
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "PEN" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => setTool('PEN')}
+      />
+      <MousePointer 
+      size={40}
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "SELECTION" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => setTool('SELECTION')}
+      />
+      <Minus 
+      size={40} 
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "ARROW" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => setTool('ARROW')}
+      />
+      <Square 
+      size={40} 
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "SQUARE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => setTool('SQUARE')}
+      />
+      <Circle 
+      size={40} 
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "CIRCLE" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => setTool('CIRCLE')}
+      />
+      <CaseUpper 
+      size={40} 
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "TEXT" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => {
+        setTool('TEXT');
+      }}
+      />
+      {/* <Eraser 
+      size={40} 
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "ERASER" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}/> */}
+      <Trash2 
+      size={40} 
+      strokeWidth={2} 
+      className={` hover:bg-gray-950 ${tool === "CLEAR" ? 'bg-purple-400/30': ''} p-2 rounded-lg`}
+      onClick={() => setElements([])}
+      />
     </div>
   )
 }
