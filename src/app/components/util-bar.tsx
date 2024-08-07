@@ -18,23 +18,27 @@ function UtilBar() {
         const copyElement = [...elements];
         
         if(!moveableActiveElement) return
-        // @ts-ignore
-        copyElement[moveableActiveElement.id] = createElement({
-            id: moveableActiveElement.id, 
-            startX: moveableActiveElement.startX, 
-            startY: moveableActiveElement.startY, 
-            currentX: moveableActiveElement.currentX, 
-            currentY: moveableActiveElement.currentY, 
-            type: moveableActiveElement.type, 
-            empty: moveableActiveElement.empty, 
-            stroke: Stroke || moveableActiveElement.stroke, 
-            strokeWidth: StrokeWidth || moveableActiveElement.strokeWidth, 
-            strokeStyle: StrokeStyle || moveableActiveElement.strokeStyle,
-        })
-        
-        setElements(copyElement);
+        setElements(prevElements => {
+            const copyElement = [...prevElements];
+    
+            // @ts-ignore
+            copyElement[moveableActiveElement.id] = createElement({
+                id: moveableActiveElement.id,
+                startX: moveableActiveElement.startX,
+                startY: moveableActiveElement.startY,
+                currentX: moveableActiveElement.currentX,
+                currentY: moveableActiveElement.currentY,
+                type: moveableActiveElement.type,
+                empty: moveableActiveElement.empty,
+                stroke: Stroke || moveableActiveElement.stroke,
+                strokeWidth: StrokeWidth || moveableActiveElement.strokeWidth,
+                strokeStyle: StrokeStyle || moveableActiveElement.strokeStyle,
+            });
+    
+            return copyElement;
+        });
 
-    }, [Stroke, StrokeWidth, StrokeStyle, moveableActiveElement, elements, setElements])
+    }, [Stroke, StrokeWidth, StrokeStyle, moveableActiveElement])
     
 
   return (

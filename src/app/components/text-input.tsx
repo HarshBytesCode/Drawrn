@@ -70,7 +70,7 @@ function TextInput({canvasRef}: any) {
     
       return () => {
 
-        canvasRef.current.removeEventListener('mousedown', handleMouseDown )
+        canvasRef.current?.removeEventListener('mousedown', handleMouseDown )
       }
     }, [tool, canvasRef, setIsWriting])
 
