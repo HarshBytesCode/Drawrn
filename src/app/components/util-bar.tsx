@@ -1,4 +1,4 @@
-
+"use client"
 import { BoxSelect, Menu, Minus, Square } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';

@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import React, { useEffect, useRef, useState } from 'react'
 import  { draw, MouseDown, MouseMove, MouseUp } from '../utils/draw'
 import Bar from '../components/bar';
@@ -20,33 +20,32 @@ function Canvas() {
   const strokeWidth = useRecoilValue(strokeWidthAtom);
   const strokeStyle = useRecoilValue(strokeStyleAtom);
   const [offset, setOffset] = useRecoilState(offsetAtom);
+  const [dimentions, setDimentions] = useState({width: 0, height: 0})
 
   useEffect(() => {
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      // Update canvas dimensions on window resize
-      const handleResize = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        draw({ canvasRef, elements, offset });
-      };
-
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-  }, [canvasRef, elements, offset]);
+    setDimentions({
+      width: window.innerWidth,
+      height: window.innerHeight
+    })
+  }, [window.innerWidth, window,innerHeight])
+  
 
   draw({canvasRef, elements, offset})
+
+  if(dimentions.width === 0) {
+    return (
+      <div>
+        Loading..
+      </div>
+    )
+  }
     
   return (
     <div>
       <canvas
-      ref={canvasRef} 
+      ref={canvasRef}
+      width={window.innerWidth} 
+      height={window.innerHeight}
       onMouseDown={(e) => MouseDown({e, tool,elements , setElements, setIsWriting,moveableActiveElement , setMoveableActiveElement, stroke, strokeWidth, strokeStyle, offset})}
       onMouseUp={(e) => MouseUp({e, tool})}
       onMouseMove={(e) => MouseMove({e, tool, elements, setElements, stroke, strokeWidth, strokeStyle, offset, setOffset})}

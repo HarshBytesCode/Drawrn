@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+"use client"
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { activeToolAtom, elementsAtom, isWritingAtom, offsetAtom } from '../utils/atom'

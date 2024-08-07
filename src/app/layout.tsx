@@ -17,9 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Provider>
-        <body className={`${inter.className} overflow-hidden `}>{children}</body>
-      </Provider>
+        <body className={`${inter.className} overflow-hidden `}>
+          <Provider>{children}</Provider>
+        </body>
     </html>
   );
 }
