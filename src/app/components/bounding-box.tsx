@@ -25,6 +25,8 @@ function BoundingBox() {
   const [stroke, setStroke] = useRecoilState(strokeAtom);
   const strokeWidth = useRecoilValue(strokeWidthAtom);
   const strokeStyle = useRecoilValue(strokeStyleAtom);
+  const [onClickX, setOnClickX] = useState(0);
+  const [onClickY, setOnClickY] = useState(0);
 
   useEffect(() => {
 
@@ -36,6 +38,7 @@ function BoundingBox() {
       setBoundingBoxStartX(moveableActiveElement.startX + offset.x);
       setBoundingBoxStartY(moveableActiveElement.startY + offset.y);
     }
+    
   }, [moveableActiveElement]);
 
 
@@ -43,18 +46,24 @@ function BoundingBox() {
     function handleMouseMove(e: MouseEvent) {
       
       if(isMoving) {
+        
         let newWidth = width;
         let newHeight = height;
         const clientX = e.clientX - offset.x;
         const clientY = e.clientY - offset.y;
         if(moveableActiveElement?.type === 'SQUARE') {
-
+          
           switch (resizingDirection) {
             case 'move':
-              setStartX(clientX);
-              setStartY(clientY);
-              setBoundingBoxStartX(clientX + offset.x);
-              setBoundingBoxStartY(clientY + offset.y);
+              const moveX = clientX - onClickX;
+              const moveY = clientY - onClickY;
+              
+              setStartX(startX + moveX);
+              setStartY(startY + moveY);
+              setBoundingBoxStartX(startX + moveX);
+              setBoundingBoxStartY(startY + moveY);
+              setOnClickX(clientX);
+              setOnClickY(clientY);
               break;
             case 'se':
               newWidth = clientX - startX; 
@@ -105,7 +114,8 @@ function BoundingBox() {
           setHeight(newHeight);
   
           const copyElement = [...elements];
-  // @ts-ignore type
+          
+          // @ts-ignore type
           copyElement[moveableActiveElement.id] = createElement({
             id: moveableActiveElement.id, 
             startX:startX, 
@@ -238,6 +248,8 @@ function BoundingBox() {
 
           switch (resizingDirection) {
             case 'move':
+              console.log('move');
+              
               setStartX(clientX);
               setStartY(clientY);
               setBoundingBoxStartX(clientX + offset.x);
@@ -285,7 +297,11 @@ function BoundingBox() {
   
   function handleMouseDown({e, direction}: any) {
     setResizingDirection(direction)
-    setIsMoving(true) 
+    setIsMoving(true)
+    setOnClickX(e.clientX);
+    setOnClickY(e.clientY); 
+    console.log('hii');
+    
   }
 // FIX TYPE
   function handleDelete() {

@@ -1,22 +1,21 @@
-import { useRecoilState } from "recoil";
-import { elementsAtom, moveableActiveElementAtom } from "./atom";
 
-export default function  setActiveElement({elements , setElements,moveableActiveElement, setMoveableActiveElement, x, y, offset}: {elements:any , setElements: any,moveableActiveElement: any , setMoveableActiveElement: any, x:number, y:number, offset:any}) {
+export default function  setActiveElement({elements ,moveableActiveElement, setMoveableActiveElement, x, y}: {elements:any , moveableActiveElement: any , setMoveableActiveElement: React.Dispatch<React.SetStateAction<any>>, x:number, y:number}) {
     
-    let foundElement;
+    let foundElement = false;
 
     elements.forEach((element: any) => {
-        
+        if(!element) return
         if(element.type === 'SQUARE') {
             
             
             if(element.startX <= x && 
-                x <= element.startX + element.width && 
-                element.startY <= y && 
-                y <= element.startY + element.height ) {
+            x <= element.startX + element.width && 
+            element.startY <= y && 
+            y <= element.startY + element.height ) {
+        
                 setMoveableActiveElement(element);
                 foundElement = true;
-                
+                return; 
             }
         }
 
@@ -31,35 +30,23 @@ export default function  setActiveElement({elements , setElements,moveableActive
             if(element.startX <= x && x <= element.endX && startY <= y && y <= endY ) {
                 setMoveableActiveElement(element);
                 foundElement = true;
+                return;
             }
         }
 
         if(element.type === 'CIRCLE') {
             
-            const rx = Math.abs(element.radiusX);
-            const ry = Math.abs(element.radiusY);
+            const rx = Math.abs(element.width);
+            const ry = Math.abs(element.height);
             const dx = x - element.startX;
             const dy = y - element.startY
             
             const circleArea = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry)
 
             if(circleArea <= 1) {
-
-                element = {
-                    id: element.id,
-                    startX: element.startX,
-                    startY: element.startY,
-                    width: element.radiusX,
-                    height: element.radiusY,
-                    roughElement: element.roughElement,
-                    type: element.type,
-                    stroke: element.stroke,
-                    strokeWidth: element.strokeWidth,
-                    strokeStyle: element.strokeStyle
-                }
-                
                 setMoveableActiveElement(element);
                 foundElement = true;
+                return;
                 
             }
         }
@@ -68,21 +55,16 @@ export default function  setActiveElement({elements , setElements,moveableActive
             const width = element.startX + element.text.length * 12
             
             if(element.startX <= x && x <= width && y <= element.startY && y >= element.startY - 20 ) {
-                element = {
-                    id: element.id, 
-                    startX: element.startX, 
-                    startY: element.startY - 15, 
-                    text: element.text, 
-                    width: element.width, 
-                    height: element.height, 
-                    type: element.type}
                 setMoveableActiveElement(element);
                 foundElement = true;
+                return;
+                
+                
             }
         }
 
     })
-
+    
     if(!foundElement) setMoveableActiveElement(null)
 
 }

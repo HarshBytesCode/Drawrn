@@ -16,10 +16,10 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
   if(canvasRef.current){
     rc = rough.canvas(canvasRef.current)
   }
-
+  
   // @ts-ignore
   ctx?.clearRect(0,0, canvasRef.current?.width, canvasRef.current?.height)
-
+  
   ctx?.save()
   ctx?.translate(
     offset.x,
@@ -41,6 +41,7 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
     }
 
     if(element.type === 'SQUARE') {
+      
       rc.draw(element.roughElement)
     }
 
@@ -49,6 +50,7 @@ export const draw = (canvasRef: RefObject<HTMLCanvasElement>) => {
     }
 
     if(element.type === 'TEXT') {
+      
       if(ctx) {
         ctx.fillStyle = 'white';
         ctx.font = "20px Courier";
@@ -85,7 +87,7 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
 
   if(tool === 'SELECTION') {
     
-    setActiveElement({elements, setElements,moveableActiveElement , setMoveableActiveElement, x, y, offset })
+    setActiveElement({elements, moveableActiveElement , setMoveableActiveElement, x, y })
   }
 
   if(tool === 'ARROW') {
