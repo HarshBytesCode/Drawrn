@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeToolAtom, strokeAtom, strokeWidthAtom, strokeStyleAtom, elementsAtom, moveableActiveElementAtom } from '../utils/atom';
 import { createElement } from '../utils/createElement';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 
 function UtilBar() {
     const [elements, setElements] = useRecoilState(elementsAtom);
@@ -39,13 +41,22 @@ function UtilBar() {
         });
 
     }, [Stroke, StrokeWidth, StrokeStyle, moveableActiveElement])
+
+    useGSAP(() => {
+        gsap.to("#Menu", {
+            left: 12,
+            delay: 1,
+            opacity: 100,
+            duration: 1,
+        })
+    })
     
 
   return (
     <div
     className='text-white'
     >
-        <Menu size={40} className='fixed top-4 left-3 p-2 bg-gray-900 rounded-lg text-white'
+        <Menu id='Menu' size={40} className='fixed top-4 left-0 p-2 opacity-0 bg-gray-900 rounded-lg text-white'
         onClick={() => setUtilBarVisible((prev) => !prev)}
         />
         <div className={`fixed flex flex-col space-y-3 top-20 ${utilBarVisible || moveableActiveElement ? " left-3" : " -left-96"} p-6 transition-all w-[11vw] rounded-xl bg-gray-900`}>

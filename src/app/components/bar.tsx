@@ -3,14 +3,31 @@ import { CaseUpper, Circle, Eraser, Hand, Minus, MousePointer, MoveUpRight, Pen,
 import React from 'react'
 import {activeToolAtom, elementsAtom, isWritingAtom, moveableActiveElementAtom} from '../utils/atom'
 import { useRecoilState } from 'recoil';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 function Bar() {
   const [tool, setTool] = useRecoilState(activeToolAtom);
   const [isWriting, setIsWriting] = useRecoilState(isWritingAtom);
   const [elements, setElements] = useRecoilState(elementsAtom);
   const [moveableActiveElement, setMoveableActiveElement] = useRecoilState(moveableActiveElementAtom);
   
+  useGSAP(() => {
+    gsap.to("#main", {
+      y: 20,
+      delay: 0.5,
+      opacity: 100,
+      duration: 1,
+    })
+    gsap.from("#main > *", {
+      stagger: 0.2,
+      opacity: 0,
+      delay: 1,
+      y: -20
+    })
+  })
+
   return (
-    <div className='flex justify-center items-center space-x-2 fixed top-5 left-[40%] text-white bg-gray-900 p-1 rounded-lg z-50'
+    <div id='main' className='flex justify-center items-center space-x-2 fixed top-0 left-[37%] text-white opacity-0 bg-gray-900 p-1 rounded-lg z-50'
     onClick={() => {
       setMoveableActiveElement(null)
       setIsWriting(false)}}
