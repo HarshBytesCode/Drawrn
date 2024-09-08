@@ -11,10 +11,7 @@ function TextInput({canvasRef}: any) {
     const [tool, setTool] = useRecoilState(activeToolAtom);
     const [offset, setOffset] = useRecoilState(offsetAtom);
     const inputRef = useRef<HTMLInputElement>(null);
-    let id: number;
-    if(elements.length === 0) {
-        id = elements.length + 1
-    } else id = elements.length
+    let id: number = elements.length;
 
     setTimeout(() => {
         if(inputRef.current) {

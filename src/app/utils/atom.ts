@@ -40,3 +40,8 @@ export const offsetAtom = atom({
     key: 'offsetAtom',
     default: {x:0, y:0}
 })
+
+export const isDrawingAtom = atom({
+    key: "isDrawing",
+    default: false
+})

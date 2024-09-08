@@ -1,7 +1,5 @@
 'use client'
 import { RefObject } from "react";
-import { useRecoilState } from "recoil";
-import {  elementsAtom, offsetAtom } from "./atom";
 import rough from 'roughjs';
 import { createElement } from "./createElement";
 import setActiveElement from "./setActiveElement";
@@ -27,8 +25,8 @@ export const draw = ({canvasRef, elements, offset} : {
     offset.x,
     offset.y
   )
+  
   elements.forEach((element: any) => {
-
     if(!element) {
       return
     }
@@ -72,24 +70,25 @@ export const draw = ({canvasRef, elements, offset} : {
 export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveableActiveElement, setMoveableActiveElement, stroke, strokeWidth, strokeStyle, offset}: {e:any, tool:string,elements:any , setElements: any, setIsWriting:any,moveableActiveElement: any , setMoveableActiveElement: any, stroke: string, strokeWidth: number, strokeStyle: number, offset: any}) => {
   const x = e.clientX - offset.x;
   const y = e.clientY - offset.y;
-  let id: number;
-  if(elements.length === 0) {
-    id = elements.length + 1
-  } else id = elements.length
+  let id: number = elements.length;
   
   if(tool === 'PAN') {
     activeElement = {id: 999999, x: e.clientX,y: e.clientY};
+    return;
   }
 
   if(tool === 'PEN') {
     const element = createElement({id: id , startX:x, startY:y, type: tool, stroke, strokeWidth});
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
+    return;
   }
 
   if(tool === 'SELECTION') {
     
     setActiveElement({elements, moveableActiveElement , setMoveableActiveElement, x, y })
+
+    return;
   }
 
   if(tool === 'ARROW') {
@@ -97,6 +96,7 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
     const element = createElement({id: id, startX:x, startY:y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle })
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
+    return;
   }
   
   if(tool === 'SQUARE') {
@@ -104,6 +104,7 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
     
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
+    return;
     
   }
 
@@ -111,6 +112,7 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
     const element = createElement({id: id, startX: x, startY: y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle})
     setElements((prev: []) => [...prev, element]);
     activeElement = {id,x,y};
+    return;
   }
   
 }
@@ -139,21 +141,29 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
     if(tool == 'PEN') {
       copyElement[activeElement.id] = createElement({id: activeElement.id, startX:x, startY:y, type: tool, stroke, strokeWidth});
       setElements(copyElement)
+
+      return;
     }
 
     if(tool == 'ARROW') {
       copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle});
       setElements(copyElement)
+
+      return;
     }
     
     if(tool === 'SQUARE' && activeElement && copyElement) {
       copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x - activeElement.x, currentY: y - activeElement.y, type: tool, stroke, strokeWidth, strokeStyle});
       setElements(copyElement);
+
+      return;
     }
 
     if(tool === 'CIRCLE' && activeElement && copyElement) {
       copyElement[activeElement.id] = createElement({id: activeElement.id, startX:activeElement.x, startY:activeElement.y, currentX: x, currentY: y, type: tool, stroke, strokeWidth, strokeStyle});
       setElements(copyElement);
+
+      return;
     }
     
     
@@ -166,7 +176,6 @@ export const MouseUp = ({e, tool}: {e:any, tool:string}) => {
   
   if(tool === 'PEN') {
     createElement({type: tool, empty: true})
-
   }
   activeElement = null;
   

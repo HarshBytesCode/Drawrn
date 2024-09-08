@@ -245,11 +245,9 @@ function BoundingBox() {
         }
 
         if(moveableActiveElement.type === 'TEXT') {
-
+    
           switch (resizingDirection) {
             case 'move':
-              console.log('move');
-              
               setStartX(clientX);
               setStartY(clientY);
               setBoundingBoxStartX(clientX + offset.x);
