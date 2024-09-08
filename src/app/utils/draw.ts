@@ -122,12 +122,12 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
   
 }
 
-export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth, strokeStyle, offset, setOffset}: {e:any, tool:string, elements:any, setElements: any, stroke: string, strokeWidth: number, strokeStyle: number,offset:any, setOffset: any}) => {
+export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth, strokeStyle, offset, setOffset, undoList, setUndoList}: {e:any, tool:string, elements:any, setElements: any, stroke: string, strokeWidth: number, strokeStyle: number,offset:any, setOffset: any, undoList: any, setUndoList: any}) => {
   const x = e.clientX - offset.x;
   const y = e.clientY - offset.y;
   
   if(activeElement) {
-    const copyElement = [...elements]
+    const copyElement = [...elements];
     
     if(tool === 'PAN') {
       const dx = e.clientX - activeElement.x;
@@ -146,7 +146,7 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
     if(tool == 'PEN') {
       copyElement[activeElement.id] = createElement({id: activeElement.id, startX:x, startY:y, type: tool, stroke, strokeWidth});
       setElements(copyElement)
-      
+
       return;
     }
 
@@ -172,7 +172,7 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
     }
 
     if(tool === 'ERASER' && activeElement && copyElement) {
-      let removeableElementId: number;
+      let removableElement: any;
       elements.forEach((element: any) => {
         if(!element) return
         if(element.type === 'SQUARE') {
@@ -181,8 +181,7 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
           x <= element.startX + element.width && 
           element.startY <= y && 
           y <= element.startY + element.height ) {
-      
-            removeableElementId = element.id; 
+            removableElement = element; 
             return; 
           }
         }
@@ -196,7 +195,7 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
           else endY = element.startY;
 
           if(element.startX <= x && x <= element.endX && startY <= y && y <= endY ) {
-            removeableElementId = element.id;  
+            removableElement = element;  
             return;
           }
         }
@@ -211,7 +210,7 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
           const circleArea = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry)
 
           if(circleArea <= 1) {
-            removeableElementId = element.id;  
+            removableElement = element;  
             return;
           }
         }
@@ -220,14 +219,16 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
           const width = element.startX + element.text.length * 12
           
           if(element.startX <= x && x <= width && y <= element.startY && y >= element.startY - 20 ) {
-            removeableElementId = element.id;
+            removableElement = element;
             return;  
           }
         }
       })
-
-      const filtered = copyElement.filter((element) => element.id !== removeableElementId);
+      if(!removableElement) return;
+      
+      const filtered = copyElement.filter((element) => element.id !== removableElement.id);
       setElements(filtered);
+      setUndoList([removableElement, ...undoList])
       
     }
     

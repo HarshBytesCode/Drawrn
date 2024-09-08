@@ -4,9 +4,10 @@ import  { draw, MouseDown, MouseMove, MouseUp } from '../utils/draw'
 import Bar from '../components/bar';
 import UtilBar from '../components/util-bar'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { activeToolAtom, elementsAtom, isWritingAtom, moveableActiveElementAtom, offsetAtom, strokeAtom, strokeStyleAtom, strokeWidthAtom } from '../utils/atom'
+import { activeToolAtom, elementsAtom, isWritingAtom, moveableActiveElementAtom, offsetAtom, strokeAtom, strokeStyleAtom, strokeWidthAtom, undoListAtom } from '../utils/atom'
 import TextInput from '../components/text-input'
 import BoundingBox from '../components/bounding-box'
+import Undo_Redo from '../components/undo-redo';
 
 
 function Canvas() {
@@ -20,7 +21,8 @@ function Canvas() {
   const strokeWidth = useRecoilValue(strokeWidthAtom);
   const strokeStyle = useRecoilValue(strokeStyleAtom);
   const [offset, setOffset] = useRecoilState(offsetAtom);
-  const [dimentions, setDimentions] = useState({width: 0, height: 0})
+  const [dimentions, setDimentions] = useState({width: 0, height: 0});
+  const [undoList, setUndoList] = useRecoilState(undoListAtom);
 
   useEffect(() => {
     setDimentions({
@@ -55,13 +57,14 @@ function Canvas() {
       height={window.innerHeight}
       onMouseDown={(e) => MouseDown({e, tool,elements , setElements, setIsWriting,moveableActiveElement , setMoveableActiveElement, stroke, strokeWidth, strokeStyle, offset})}
       onMouseUp={(e) => MouseUp({e, tool})}
-      onMouseMove={(e) => MouseMove({e, tool, elements, setElements, stroke, strokeWidth, strokeStyle, offset, setOffset})}
+      onMouseMove={(e) => MouseMove({e, tool, elements, setElements, stroke, strokeWidth, strokeStyle, offset, setOffset, undoList, setUndoList})}
       className='bg-black cursor-crosshair'
       />
       <Bar/>
       <TextInput canvasRef= {canvasRef}/>
       <BoundingBox/>
       <UtilBar/>
+      <Undo_Redo/>
     </div>
 
   )

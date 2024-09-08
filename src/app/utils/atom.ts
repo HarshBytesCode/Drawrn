@@ -45,3 +45,8 @@ export const isDrawingAtom = atom({
     key: "isDrawing",
     default: false
 })
+
+export const undoListAtom = atom({
+    key: "UndoList",
+    default: []
+})
