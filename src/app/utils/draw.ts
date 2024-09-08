@@ -114,6 +114,11 @@ export const MouseDown = ({e, tool, elements , setElements, setIsWriting,moveabl
     activeElement = {id,x,y};
     return;
   }
+
+  if( tool === 'ERASER') {
+    activeElement = {id: 9999999, x:0, y:0}
+    return;
+  }
   
 }
 
@@ -141,7 +146,7 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
     if(tool == 'PEN') {
       copyElement[activeElement.id] = createElement({id: activeElement.id, startX:x, startY:y, type: tool, stroke, strokeWidth});
       setElements(copyElement)
-
+      
       return;
     }
 
@@ -165,7 +170,66 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
 
       return;
     }
+
+    if(tool === 'ERASER' && activeElement && copyElement) {
+      let removeableElementId: number;
+      elements.forEach((element: any) => {
+        if(!element) return
+        if(element.type === 'SQUARE') {
     
+          if(element.startX <= x && 
+          x <= element.startX + element.width && 
+          element.startY <= y && 
+          y <= element.startY + element.height ) {
+      
+            removeableElementId = element.id; 
+            return; 
+          }
+        }
+
+        if(element.type === 'ARROW') {
+            
+          let startY, endY;
+          if(element.startY < element.endY) startY = element.startY;
+          else startY = element.endY;
+          if(element.endY > element.startY) endY = element.endY;
+          else endY = element.startY;
+
+          if(element.startX <= x && x <= element.endX && startY <= y && y <= endY ) {
+            removeableElementId = element.id;  
+            return;
+          }
+        }
+
+        if(element.type === 'CIRCLE') {
+            
+          const rx = Math.abs(element.width);
+          const ry = Math.abs(element.height);
+          const dx = x - element.startX;
+          const dy = y - element.startY
+          
+          const circleArea = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry)
+
+          if(circleArea <= 1) {
+            removeableElementId = element.id;  
+            return;
+          }
+        }
+
+        if(element.type === 'TEXT') {
+          const width = element.startX + element.text.length * 12
+          
+          if(element.startX <= x && x <= width && y <= element.startY && y >= element.startY - 20 ) {
+            removeableElementId = element.id;
+            return;  
+          }
+        }
+      })
+
+      const filtered = copyElement.filter((element) => element.id !== removeableElementId);
+      setElements(filtered);
+      
+    }
     
   }
   

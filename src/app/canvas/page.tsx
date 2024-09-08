@@ -27,7 +27,14 @@ function Canvas() {
       width: window.innerWidth,
       height: window.innerHeight
     })
-  }, [window.innerWidth, window,innerHeight])
+
+    if(canvasRef.current) {
+      if(tool === 'ERASER') canvasRef.current.style.cursor = "url(/eraser.png), auto";
+      else if(tool === 'PAN') canvasRef.current.style.cursor = "url(/open-hand.png), auto";
+      else if(tool === 'SELECTION') canvasRef.current.style.cursor = "default"
+      else canvasRef.current.style.cursor = "crosshair";
+    }
+  }, [window.innerWidth, window,innerHeight, tool, canvasRef.current])
   
 
   draw({canvasRef, elements, offset})
@@ -49,7 +56,7 @@ function Canvas() {
       onMouseDown={(e) => MouseDown({e, tool,elements , setElements, setIsWriting,moveableActiveElement , setMoveableActiveElement, stroke, strokeWidth, strokeStyle, offset})}
       onMouseUp={(e) => MouseUp({e, tool})}
       onMouseMove={(e) => MouseMove({e, tool, elements, setElements, stroke, strokeWidth, strokeStyle, offset, setOffset})}
-      className='bg-black'
+      className='bg-black cursor-crosshair'
       />
       <Bar/>
       <TextInput canvasRef= {canvasRef}/>
