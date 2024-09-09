@@ -31,9 +31,15 @@ export const draw = ({canvasRef, elements, offset} : {
       return
     }
     if(element.type === 'PEN') {
-      element.roughElementArray.forEach((subelement:any) => {
-        rc.draw(subelement)
-      })
+      if(!ctx) return
+      ctx.strokeStyle = element.stroke;
+      ctx.lineWidth = element.strokeWidth;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      var path = new Path2D();
+      element.roughElement.forEach((point: any) => path.lineTo(point.currentX, point.currentY))
+      ctx?.stroke(path);
+
     }
 
     if(element.type === 'ARROW') {
@@ -144,7 +150,17 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
     }
 
     if(tool == 'PEN') {
-      copyElement[activeElement.id] = createElement({id: activeElement.id, startX:x, startY:y, type: tool, stroke, strokeWidth});
+      copyElement[activeElement.id] = createElement({
+        id: activeElement.id, 
+        currentX:x, 
+        currentY:y, 
+        startX: activeElement.x, 
+        startY: activeElement.y,
+        type: tool, 
+        stroke, 
+        strokeWidth
+      });
+      
       setElements(copyElement)
 
       return;

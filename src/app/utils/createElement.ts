@@ -1,6 +1,6 @@
 import rough from 'roughjs';
 let temp: {}[] = [];
-let prevX:number | null, prevY: number | null;
+let minX:number = Infinity, minY: number = Infinity, maxX:number = -Infinity, maxY: number = -Infinity
 
 export function createElement({id, startX, startY, currentX, currentY, type, empty, stroke, strokeWidth, strokeStyle }: any){
     const generator = rough.generator()
@@ -8,22 +8,33 @@ export function createElement({id, startX, startY, currentX, currentY, type, emp
     if(type == 'PEN') {
       if(empty) {
         temp = [];
-        prevX = null;
-        prevY = null;
+        minX = Infinity 
+        minY = Infinity
+        maxX = -Infinity
+        maxY = -Infinity
         return
       }
-      if(prevX && prevY) {
-
-        const roughElement = generator.line(prevX, prevY, startX, startY, {stroke, strokeWidth: 2 + (2*strokeWidth), roughness: 0,})
-        temp = [...temp, roughElement]
-
+      if(!currentX && !currentY) {
+        temp = [...temp, {startX, startY}]
+        return
       }
-      prevX = startX;
-      prevY = startY
+
+      temp = [...temp, {currentX, currentY}]
+      minX = Math.min(minX, currentX);
+      minY = Math.min(minY, currentY);
+      maxX = Math.max(maxX, currentX);
+      maxY = Math.max(maxY, currentY);
+      
       return {
         id,
-        roughElementArray: temp,
-        type
+        roughElement: temp,
+        type,
+        stroke,
+        startX: minX,
+        startY: minY,
+        width: maxX - minX,
+        height: maxY - minY,
+        strokeWidth: strokeWidth*2,
       }
       
     }
