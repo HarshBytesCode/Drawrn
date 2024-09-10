@@ -239,6 +239,16 @@ export const MouseMove = ({e, tool, elements , setElements, stroke, strokeWidth,
             return;  
           }
         }
+
+        if(element.type === "PEN") {
+          element.roughElement.forEach((points: any) => {
+            
+            if(points.currentX >= x-10 && points.currentX <= x+10 && points.currentY >= y-10 && points.currentY <= y+10) {
+              removableElement = element;
+              return;
+            }
+          })
+        }
       })
       if(!removableElement) return;
       

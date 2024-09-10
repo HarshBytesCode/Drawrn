@@ -21,11 +21,11 @@ function Canvas() {
   const strokeWidth = useRecoilValue(strokeWidthAtom);
   const strokeStyle = useRecoilValue(strokeStyleAtom);
   const [offset, setOffset] = useRecoilState(offsetAtom);
-  const [dimentions, setDimentions] = useState({width: 0, height: 0});
+  const [dimensions, setDimensions] = useState({width: 0, height: 0});
   const [undoList, setUndoList] = useRecoilState(undoListAtom);
 
   useEffect(() => {
-    setDimentions({
+    setDimensions({
       width: window.innerWidth,
       height: window.innerHeight
     })
@@ -38,10 +38,11 @@ function Canvas() {
     }
   }, [window.innerWidth, window,innerHeight, tool, canvasRef.current])
   
+  useEffect(()=> {
+    draw({canvasRef, elements, offset})
+  },[elements])
 
-  draw({canvasRef, elements, offset})
-
-  if(dimentions.width === 0) {
+  if(dimensions.width === 0) {
     return (
       <div>
         Loading..
