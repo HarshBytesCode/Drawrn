@@ -303,7 +303,7 @@ function BoundingBox() {
 // FIX TYPE
   function handleDelete() {
 
-    setElements((prev) => prev.filter((element: any) => moveableActiveElement.id !== element.id))
+    setElements((prev) => [...prev.filter((element: any) => moveableActiveElement.id !== element.id)])
     setMoveableActiveElement(null)
   }
 
